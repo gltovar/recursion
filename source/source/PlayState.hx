@@ -20,7 +20,8 @@ class PlayState extends FlxState
 	private var _mapCollisions:FlxTilemap;
 	//private var _intersections:FlxTilemap;
 	private var _intersections:FlxTypedGroup<IntersectionNode>;
-	private var _avatar:Avatar;
+	//private var _avatar:Avatar;
+	private var _player:Player;
 	
 	override public function create():Void
 	{			
@@ -72,14 +73,17 @@ class PlayState extends FlxState
 		add( _intersections );
 		
 		
+		_player = new Player(_intersections);
+		add( _player.controllingAvatar);
+		
 		
 		//FlxArrayUtil.
 		
 		// Then add the player, its own class with its own logic
 		
-		_avatar = new Avatar(32, 176);
+		/*_avatar = new Avatar(32, 176);
 		add(_avatar);
-		_avatar.intersections = _intersections;
+		_avatar.intersections = _intersections;*/
 		
 	}
 	
@@ -87,7 +91,7 @@ class PlayState extends FlxState
 	{
 		super.update();
 		
-		FlxG.collide(_avatar, _mapCollisions);
+		FlxG.collide(_player.controllingAvatar, _mapCollisions);
 		//FlxG.overlap(_player, _intersections, playerAtIntersection);
 		
 		if (FlxG.keys.justReleased.ENTER)

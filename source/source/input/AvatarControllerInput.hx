@@ -3,7 +3,10 @@ package input;
 import flixel.FlxBasic;
 import flixel.FlxG;
 import flixel.group.FlxTypedGroup;
+import flixel.util.FlxColor;
 import flixel.util.FlxMath;
+import flixel.util.FlxPoint;
+import flixel.util.FlxRandom;
 import intersections.IntersectionNode;
 
 /**
@@ -13,7 +16,7 @@ import intersections.IntersectionNode;
 class AvatarControllerInput extends FlxBasic
 {
 
-	private var _player:Player
+	private var _player:Player;
 	
 	private static inline var INPUT_MAX_RELEASE_TIME:Int = 300;
 	
@@ -31,9 +34,16 @@ class AvatarControllerInput extends FlxBasic
 
 	//private var ButtonInput
 	
-	public function new() 
+	public function new( p_player:Player ) 
 	{
 		super();
+		
+		_player = p_player;
+		
+		_timeLastPressed = [Directions.UP 		=> 0,
+							Directions.DOWN 	=> 0,
+							Directions.LEFT 	=> 0,
+							Directions.RIGHT 	=> 0 ];
 		
 	}
 	
@@ -112,7 +122,7 @@ class AvatarControllerInput extends FlxBasic
 			
 			
 			var l_passedThoughCenterTest:Bool = passedThroughCenterTest();
-			var l_amountPassedCenter:Int = FlxMath.distanceBetween(this, _currentIntersection);
+			var l_amountPassedCenter:Int = FlxMath.distanceBetween(_player.controllingAvatar, _currentIntersection);
 			if ( FlxMath.distanceBetween(_player.controllingAvatar, _currentIntersection) <= 4 )
 			{
 				var l_newDirection:Directions = Directions.NONE;
@@ -147,7 +157,7 @@ class AvatarControllerInput extends FlxBasic
 						}
 						else
 						{
-							setPosition( _currentIntersection.x, _currentIntersection.y );
+							_player.controllingAvatar.setPosition( _currentIntersection.x, _currentIntersection.y );
 						}
 					}
 				}
@@ -163,7 +173,7 @@ class AvatarControllerInput extends FlxBasic
 			for ( l_direction in l_directionsList )
 			{
 				
-				if ( _player.inputMap.inputMap.inputMap[l_direction]() )
+				if ( _player.inputMap.inputMap[l_direction]() )
 				{
 					updateVelocity( l_direction );
 				}
