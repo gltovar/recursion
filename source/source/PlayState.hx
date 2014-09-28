@@ -12,6 +12,7 @@ import flixel.util.FlxArrayUtil;
 import flixel.util.FlxPath;
 import flixel.util.FlxPoint;
 import flixel.util.FlxStringUtil;
+import input.InputMap;
 import intersections.IntersectionNode;
 
 class PlayState extends FlxState
@@ -22,6 +23,7 @@ class PlayState extends FlxState
 	private var _intersections:FlxTypedGroup<IntersectionNode>;
 	//private var _avatar:Avatar;
 	private var _player:Player;
+	private var _player2:Player;
 	
 	override public function create():Void
 	{			
@@ -73,8 +75,11 @@ class PlayState extends FlxState
 		add( _intersections );
 		
 		
-		_player = new Player(_intersections);
+		_player = new Player(_intersections, InputMap.WSAD);
 		add( _player.controllingAvatar);
+		
+		_player2 = new Player(_intersections, InputMap.ARROW_KEYS);
+		add( _player2.controllingAvatar );
 		
 		
 		//FlxArrayUtil.
@@ -91,12 +96,18 @@ class PlayState extends FlxState
 	{
 		super.update();
 		
+		
+		
 		FlxG.collide(_player.controllingAvatar, _mapCollisions);
+		FlxG.collide(_player2.controllingAvatar, _mapCollisions);
 		//FlxG.overlap(_player, _intersections, playerAtIntersection);
 		
 		if (FlxG.keys.justReleased.ENTER)
 		{
 			FlxG.switchState(new PlayState2());
 		}
+		
+		_player.update();
+		_player2.update();
 	}
 }

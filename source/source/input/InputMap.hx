@@ -7,6 +7,17 @@ import flixel.FlxG;
  */
 class InputMap
 {	
+	static public var ARROW_KEYS:InputMap = new InputMap( 	function():Bool { return FlxG.keys.pressed.UP; },
+															function():Bool { return FlxG.keys.pressed.DOWN; },
+															function():Bool { return FlxG.keys.pressed.LEFT; },
+															function():Bool { return FlxG.keys.pressed.RIGHT; } );
+															
+	static public var WSAD:InputMap = new InputMap( 		function():Bool { return FlxG.keys.pressed.W; },
+															function():Bool { return FlxG.keys.pressed.S; },
+															function():Bool { return FlxG.keys.pressed.A; },
+															function():Bool { return FlxG.keys.pressed.D; } );
+	
+	
 	public var inputMap:Map < Directions, Void->Bool > ;
 	
 	private var _up:Void->Bool;

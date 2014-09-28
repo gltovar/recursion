@@ -8,35 +8,36 @@ import flixel.util.FlxMath;
 import flixel.util.FlxPoint;
 import flixel.util.FlxRandom;
 import intersections.IntersectionNode;
+import openfl.events.EventDispatcher;
 
 /**
  * ...
  * @author 
  */
-class AvatarControllerInput extends FlxBasic
+class AvatarControllerInput extends FlxBasic implements IAvatarController
 {
+	public var dispatcher(default, null):EventDispatcher;
+	public var intersections:FlxTypedGroup<IntersectionNode>;
 
 	private var _player:Player;
-	
 	private static inline var INPUT_MAX_RELEASE_TIME:Int = 300;
-	
 	private var _currentIntersection:IntersectionNode = null;
-	private var _currentDirection:Directions = Directions.NONE;
-	
+	public var currentDirection(default, null):Directions;
 	private var _timeLastPressed:Map<Directions, Int>; 
 	
-	
-	public var intersections:FlxTypedGroup<IntersectionNode>;
 	
 	private var _prevPassedThroughCenter:Bool = false;
 	private var _intendedDirection:Directions = Directions.NONE;
 	
 
-	//private var ButtonInput
 	
 	public function new( p_player:Player ) 
 	{
 		super();
+		
+		currentDirection = Directions.NONE;
+		
+		dispatcher = new EventDispatcher();
 		
 		_player = p_player;
 		
@@ -65,10 +66,15 @@ class AvatarControllerInput extends FlxBasic
 			var l_directionVector = Reg.DIRECTION_VECTORS[ p_direction ];			
 			Reflect.setProperty( _player.controllingAvatar.velocity,  l_directionVector.axis, Reflect.getProperty(_player.controllingAvatar.maxVelocity, l_directionVector.axis) * l_directionVector.magnitude );
 		}
-		_currentDirection = p_direction;
+		
+		if ( currentDirection != p_direction )
+		{
+			dispatcher.dispatchEvent(new AvatarControllerEvent( AvatarControllerEvent.DIRECTION_CHANGE ) );
+		}
+		currentDirection = p_direction;
 	}
 	
-	private function onIntersectionOverlap( p_player:Avatar, p_intersectionNode:IntersectionNode ):Void
+	private function onIntersectionOverlap( p_player:AvatarView, p_intersectionNode:IntersectionNode ):Void
 	{
 		if ( _currentIntersection == null || _currentIntersection != p_intersectionNode )
 		{
@@ -80,9 +86,9 @@ class AvatarControllerInput extends FlxBasic
 	
 	private function passedThroughCenterTest():Bool
 	{
-		if ( _currentDirection != Directions.NONE && _currentIntersection != null )
+		if ( currentDirection != Directions.NONE && _currentIntersection != null )
 		{
-			var l_directionVector:DirectionVector = Reg.DIRECTION_VECTORS[_currentDirection];
+			var l_directionVector:DirectionVector = Reg.DIRECTION_VECTORS[currentDirection];
 			if ( l_directionVector.magnitude < 0 )
 			{
 				return Reflect.getProperty(_player.controllingAvatar, l_directionVector.axis) <= Reflect.getProperty(_currentIntersection, l_directionVector.axis);
@@ -102,7 +108,7 @@ class AvatarControllerInput extends FlxBasic
 		
 		if ( FlxMath.getDistance( _player.controllingAvatar.velocity, FlxPoint.weak() ) == 0 )
 		{
-			_currentDirection = Directions.NONE;
+			currentDirection = Directions.NONE;
 		}
 		
 		var l_directionVector:DirectionVector;
@@ -138,11 +144,11 @@ class AvatarControllerInput extends FlxBasic
 				
 				if (l_newDirection != Directions.NONE &&  l_passedThoughCenterTest)
 				{
-					if (  l_newDirection != _currentDirection)
+					if (  l_newDirection != currentDirection)
 					{
 						if ( l_passedThoughCenterTest != _prevPassedThroughCenter ) // Just Passed thoug the center
 						{
-							if (l_newDirection != Reg.OPPOSITE_DIRECTION[ _currentDirection ] && l_newDirection != _currentDirection )
+							if (l_newDirection != Reg.OPPOSITE_DIRECTION[ currentDirection ] && l_newDirection != currentDirection )
 							{
 								l_directionVector = Reg.DIRECTION_VECTORS[ l_newDirection ];
 								_player.controllingAvatar.setPosition( _currentIntersection.x, _currentIntersection.y );
@@ -151,9 +157,9 @@ class AvatarControllerInput extends FlxBasic
 								//trace("map: " + _timeLastPressed.toString() + "   Direction: " + l_newDirection );
 							}
 						}
-						else if(_currentDirection != Directions.NONE)
+						else if(currentDirection != Directions.NONE)
 						{
-							updateVelocity( Reg.OPPOSITE_DIRECTION[ _currentDirection ] );
+							updateVelocity( Reg.OPPOSITE_DIRECTION[ currentDirection ] );
 						}
 						else
 						{
@@ -166,7 +172,7 @@ class AvatarControllerInput extends FlxBasic
 			
 		}
 		
-		if ( _currentDirection == Directions.NONE)
+		if ( currentDirection == Directions.NONE)
 		{
 			var l_directionsList:Array<Directions> = (_currentIntersection != null) ? _currentIntersection.validDirections : Reg.DIRECTION_LIST;
 			
@@ -179,9 +185,9 @@ class AvatarControllerInput extends FlxBasic
 				}
 			}
 		}
-		else if (_player.inputMap.inputMap[ Reg.OPPOSITE_DIRECTION[_currentDirection] ]() )
+		else if (_player.inputMap.inputMap[ Reg.OPPOSITE_DIRECTION[currentDirection] ]() )
 		{
-			updateVelocity( Reg.OPPOSITE_DIRECTION[_currentDirection] );
+			updateVelocity( Reg.OPPOSITE_DIRECTION[currentDirection] );
 		}
 		
 		if ( _currentIntersection != null && _player.controllingAvatar.overlaps(_currentIntersection) == false )
