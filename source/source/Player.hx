@@ -22,13 +22,13 @@ class Player extends FlxBasic
 	public var intersections:FlxTypedGroup<IntersectionNode>;
 	
 	
-	public function new(p_intersections:FlxTypedGroup<IntersectionNode>, p_inputMap:InputMap) 
+	public function new(p_intersections:FlxTypedGroup<IntersectionNode>, p_inputMap:InputMap, p_x:Float, p_y:Float) 
 	{
 		super();
 		
 		inputMap = p_inputMap;
 		intersections = p_intersections;
-		controllingAvatar = new Avatar(this, AvatarType.ROCK, 32, 176);
+		controllingAvatar = new Avatar(this, AvatarType.PAPER, p_x, p_y);
 	}
 	
 	override public function update():Void 

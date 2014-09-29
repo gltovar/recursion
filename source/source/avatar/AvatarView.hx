@@ -21,7 +21,7 @@ class AvatarView extends FlxSprite
 		
 		avatar = p_avatar;
 		
-		loadGraphic("assets/player.png", true);
+		loadGraphic(avatar.avatarType.graphics, true);
 		maxVelocity.set( 100, 100 );
 		width = 16;
 		height = 16;

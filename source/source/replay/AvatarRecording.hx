@@ -22,6 +22,11 @@ class AvatarRecording
 		if ( p_push == false )
 		{
 			_replayFrames.sort(SortFramesByTimestamp);
+			// skip to time;
+		}
+		else
+		{
+			skipToEnd();
 		}
 	}
 	

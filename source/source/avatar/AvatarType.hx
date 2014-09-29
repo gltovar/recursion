@@ -6,9 +6,9 @@ package avatar;
  */
 class AvatarType
 {
-	static public var ROCK:AvatarType = new AvatarType("rock");
-	static public var PAPER:AvatarType = new AvatarType("paper");
-	static public var SCISSORS:AvatarType = new AvatarType("scissors");
+	static public var ROCK:AvatarType = new AvatarType("assets/rock.png");
+	static public var PAPER:AvatarType = new AvatarType("assets/paper.png");
+	static public var SCISSORS:AvatarType = new AvatarType("assets/scissors.png");
 	
 	static public var WEAK_TO:Map < AvatarType, AvatarType > = [ 	ROCK => PAPER,
 																	PAPER => SCISSORS,

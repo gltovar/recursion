@@ -20,10 +20,11 @@ class ReplayFrame extends FlxBasic
 		super();
 	}
 	
-	public function init(p_position:FlxPoint, p_direction:Directions, p_alive:Bool):ReplayFrame
+	public function init(p_timestamp:Float, p_position:FlxPoint, p_direction:Directions, p_alive:Bool):ReplayFrame
 	{
 		revive();
 		
+		timestamp = p_timestamp;
 		position = p_position;
 		direction = p_direction;
 		alive = p_alive;
@@ -39,6 +40,7 @@ class ReplayFrame extends FlxBasic
 	
 	override public function kill():Void
 	{
+		timestamp = 0;
 		position = null;
 		direction = null;
 		
@@ -46,9 +48,14 @@ class ReplayFrame extends FlxBasic
 	}
 	 
 	
-	static public function get(p_position:FlxPoint = null, p_direction:Directions = null, p_alive:Bool = null):ReplayFrame
+	static public function get( p_timestamp:Float, p_position:FlxPoint = null, p_direction:Directions = null, p_alive:Bool = null):ReplayFrame
 	{
-		return REPLAY_FRAMES.recycle( ReplayFrame ).init( p_position, p_direction, p_alive );
+		return REPLAY_FRAMES.recycle( ReplayFrame ).init( p_timestamp,  p_position, p_direction, p_alive );
+	}
+	
+	override public function toString():String 
+	{
+		return "ts: " + timestamp + ", pos: " + position.toString() + ", dir: " + direction;
 	}
 	
 }

@@ -1,5 +1,9 @@
 package input;
+import flixel.FlxBasic;
 import openfl.events.EventDispatcher;
+import avatar.Avatar;
+import replay.AvatarRecording;
+import replay.ReplayFrame;
 
 /**
  * ...
@@ -7,22 +11,35 @@ import openfl.events.EventDispatcher;
  */
 class AvatarControllerReplay extends FlxBasic implements IAvatarController
 {
-
-	public function new() 
+	public var avatar(default, null):Avatar;
+	public var dispatcher(default, null):EventDispatcher;
+	public var currentDirection(default, null):Directions;
+	
+	
+	private var _recording:AvatarRecording;
+	
+	public function new( p_avatar:Avatar, p_recording:AvatarRecording ) 
 	{
+		super();
 		
+		avatar = p_avatar;
+		_recording = p_recording;
+		
+		_recording.skipToEnd();
+		currentDirection = Directions.NONE;
 	}
 	
-	/* INTERFACE input.IAvatarController */
-	
-	function get_dispatcher():EventDispatcher 
+	override public function update():Void 
 	{
-		return _dispatcher;
-	}
-	
-	function get_currentDirection():Directions 
-	{
-		return _currentDirection;
+		super.update();
+		
+		var l_replayFrame:ReplayFrame = _recording.previousFrame();
+		if ( l_replayFrame != null )
+		{
+			avatar.view.setPosition( l_replayFrame.position.x, l_replayFrame.position.y );
+			currentDirection = l_replayFrame.direction;
+		}
+		
 	}
 	
 }
