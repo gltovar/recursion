@@ -76,10 +76,10 @@ class PlayState extends FlxState
 		
 		
 		_player = new Player(_intersections, InputMap.WSAD);
-		add( _player.controllingAvatar);
+		add( _player.controllingAvatar.view);
 		
 		_player2 = new Player(_intersections, InputMap.ARROW_KEYS);
-		add( _player2.controllingAvatar );
+		add( _player2.controllingAvatar.view );
 		
 		
 		//FlxArrayUtil.
@@ -98,8 +98,8 @@ class PlayState extends FlxState
 		
 		
 		
-		FlxG.collide(_player.controllingAvatar, _mapCollisions);
-		FlxG.collide(_player2.controllingAvatar, _mapCollisions);
+		FlxG.collide(_player.controllingAvatar.view, _mapCollisions);
+		FlxG.collide(_player2.controllingAvatar.view, _mapCollisions);
 		//FlxG.overlap(_player, _intersections, playerAtIntersection);
 		
 		if (FlxG.keys.justReleased.ENTER)

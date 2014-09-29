@@ -1,4 +1,4 @@
-package; 
+package avatar; 
 
 import flixel.FlxSprite;
 import flixel.group.FlxTypedGroup;
@@ -8,17 +8,18 @@ import intersections.IntersectionNode;
 
 class AvatarView extends FlxSprite
 {
-	private var _player:Player;
+	//public var player(default,null):Player;
+	public var avatar(default, null):Avatar;
 	
 	private static inline var INPUT_MAX_RELEASE_TIME:Int = 300;
 	
 	private var _avatarController:IAvatarController;
 	
-	public function new(X:Float, Y:Float, p_player:Player, p_intersections:FlxTypedGroup<IntersectionNode>)
+	public function new(X:Float, Y:Float, p_avatar:Avatar, p_intersections:FlxTypedGroup<IntersectionNode>)
 	{
 		super(X, Y);
 		
-		_player = p_player;
+		avatar = p_avatar;
 		
 		loadGraphic("assets/player.png", true);
 		maxVelocity.set( 100, 100 );
@@ -46,6 +47,6 @@ class AvatarView extends FlxSprite
 	
 	private function onDirectionChange( e:AvatarControllerEvent ):Void
 	{
-		trace("new direction: " + _avatarController.currentDirection);
+		//currentDirection = _avatarController.currentDirection;
 	}
 }
