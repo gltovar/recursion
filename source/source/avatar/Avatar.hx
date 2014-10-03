@@ -54,17 +54,30 @@ class Avatar extends FlxBasic
 		{
 			if ( Std.is( controller, AvatarControllerInput ) )
 			{
-				//trace("im here!");
-				controller = new AvatarControllerReplay(this, recorder.recording);
+				tryAndDestroy( cast(controller) );
+				controller = new AvatarControllerReplay(this, recorder.recording,-5);
+				
+				tryAndDestroy( recorder );
 				recorder = new AvatarRecorder(this);
 			}
 			else
 			{
+				tryAndDestroy( cast(controller) );
 				controller = new AvatarControllerInput(this);
+				
+				tryAndDestroy( recorder );
 				recorder = new AvatarRecorder(this);
 			}
 		}
 		
+	}
+	
+	static private function tryAndDestroy( p_basic:FlxBasic ):Void
+	{
+		if ( p_basic != null )
+		{
+			p_basic.destroy;
+		}
 	}
 	
 }

@@ -35,26 +35,49 @@ class AvatarRecording
 		return _replayFrames[_currentFrameIndex];
 	}
 	
-	public function nextFrame():ReplayFrame
+	public function nextFrame( p_adjustIndex:Bool = true ):ReplayFrame
 	{
+		
 		if ( _replayFrames.length > _currentFrameIndex+1 )
 		{
-			++_currentFrameIndex;
-			return currentFrame();
+			if ( p_adjustIndex )
+			{
+				++_currentFrameIndex;
+				return currentFrame();
+			}
+			return _replayFrames[ _currentFrameIndex + 1 ];
 		}
 		
 		return null;
 	}
 	
-	public function previousFrame():ReplayFrame
+	public function previousFrame( p_adjustIndex:Bool = true ):ReplayFrame
 	{
 		if ( _currentFrameIndex-1 >= 0 )
 		{
-			--_currentFrameIndex;
-			return currentFrame();
+			if ( p_adjustIndex )
+			{
+				--_currentFrameIndex;
+				return currentFrame();
+			}
+			return _replayFrames[ _currentFrameIndex - 1 ];
 		}
 		
 		return null;
+	}
+	
+	public function getFrameFromDirection( p_direction:Int, p_adjustIndex:Bool = true ):ReplayFrame
+	{
+		if ( p_direction == 0)
+		{
+			return currentFrame();
+		}
+		else if ( p_direction < 0 )
+		{
+			return previousFrame();
+		}
+		
+		return nextFrame();
 	}
 	
 	public function skipToEnd():Void
@@ -65,6 +88,11 @@ class AvatarRecording
 	public function skipToBeginning():Void
 	{
 		_currentFrameIndex = 0;
+	}
+	
+	public function getTotalDurationInTime():Float
+	{
+		return _replayFrames[ _replayFrames.length - 1 ].timestamp;
 	}
 	
 	private static function SortFramesByTimestamp( p_frameA:ReplayFrame, p_frameB:ReplayFrame ):Int

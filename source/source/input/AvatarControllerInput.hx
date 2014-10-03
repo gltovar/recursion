@@ -204,4 +204,11 @@ class AvatarControllerInput extends FlxBasic implements IAvatarController
 		}
 		
 	}
+	
+	override public function destroy():Void 
+	{
+		dispatcher = null;
+		
+		super.destroy();
+	}
 }

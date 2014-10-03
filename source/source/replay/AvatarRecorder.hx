@@ -39,4 +39,10 @@ class AvatarRecorder extends FlxBasic
 		}
 	}
 	
+	override public function destroy():Void 
+	{
+		recording = null;
+		super.destroy();
+	}
+	
 }
