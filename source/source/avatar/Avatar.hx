@@ -8,6 +8,7 @@ import input.IAvatarController;
 import openfl.events.EventDispatcher;
 import replay.AvatarRecorder;
 import replay.AvatarRecording;
+import player.Player;
 
 /**
  * ...

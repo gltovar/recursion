@@ -4,7 +4,7 @@ import flixel.group.FlxTypedGroup;
 import flixel.util.FlxPoint;
 import flixel.util.FlxVector;
 import input.DirectionVector;
-
+import player.Player;
 /**
  * ...
  * @author 
@@ -24,6 +24,12 @@ class Reg
 																				Directions.LEFT 	=> Directions.RIGHT,
 																				Directions.RIGHT 	=> Directions.LEFT ];
 																					
-	public static var PLAYER_LAYERS:Map < Player, FlxTypedGroup<AvatarView> > = [];
+	public static var PLAYERS:Array<Player> = [];
+	
+	public static var AVATAR_VIEWS:FlxTypedGroup<AvatarView> = new FlxTypedGroup<AvatarView>();
+	
+	public static var ROCKS:FlxTypedGroup<AvatarView> = new FlxTypedGroup<AvatarView>();
+	public static var PAPERS:FlxTypedGroup<AvatarView> = new FlxTypedGroup<AvatarView>();
+	public static var SCISSORS:FlxTypedGroup<AvatarView> = new FlxTypedGroup<AvatarView>();
 	
 }

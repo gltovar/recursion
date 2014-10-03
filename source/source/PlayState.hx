@@ -14,6 +14,7 @@ import flixel.util.FlxPoint;
 import flixel.util.FlxStringUtil;
 import input.InputMap;
 import intersections.IntersectionNode;
+import player.Player;
 
 class PlayState extends FlxState
 {
@@ -75,12 +76,10 @@ class PlayState extends FlxState
 		add( _intersections );
 		
 		
-		_player = new Player(_intersections, InputMap.WSAD, 16, 176);
-		add( _player.controllingAvatar.view);
-		
+		_player = new Player(_intersections, InputMap.WSAD, 16, 176);	
 		_player2 = new Player(_intersections, InputMap.ARROW_KEYS, 330, 176);
-		add( _player2.controllingAvatar.view );
 		
+		add( Reg.AVATAR_VIEWS );
 		
 		//FlxArrayUtil.
 		
@@ -97,9 +96,9 @@ class PlayState extends FlxState
 		super.update();
 		
 		
-		
-		FlxG.collide(_player.controllingAvatar.view, _mapCollisions);
-		FlxG.collide(_player2.controllingAvatar.view, _mapCollisions);
+		FlxG.collide(Reg.AVATAR_VIEWS, _mapCollisions );
+		//FlxG.collide(_player.controllingAvatar.view, _mapCollisions);
+		//FlxG.collide(_player2.controllingAvatar.view, _mapCollisions);
 		
 		if (FlxG.keys.justReleased.ENTER)
 		{

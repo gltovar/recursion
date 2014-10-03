@@ -10,6 +10,8 @@ class AvatarType
 	static public var PAPER:AvatarType = new AvatarType("assets/paper.png");
 	static public var SCISSORS:AvatarType = new AvatarType("assets/scissors.png");
 	
+	public static var TYPES:Array<AvatarType> = [ROCK, PAPER, SCISSORS];
+	
 	static public var WEAK_TO:Map < AvatarType, AvatarType > = [ 	ROCK => PAPER,
 																	PAPER => SCISSORS,
 																	SCISSORS => ROCK ];
