@@ -1,14 +1,13 @@
 package avatar;
 
 import flixel.FlxBasic;
-import flixel.FlxG;
 import input.AvatarControllerInput;
 import input.AvatarControllerReplay;
 import input.IAvatarController;
 import openfl.events.EventDispatcher;
+import player.Player;
 import replay.AvatarRecorder;
 import replay.AvatarRecording;
-import player.Player;
 
 /**
  * ...
@@ -20,7 +19,6 @@ class Avatar extends FlxBasic
 	public var dispatcher(default, null):EventDispatcher;
 	public var view:AvatarView;
 	public var controller:IAvatarController;
-	public var recording:AvatarRecording;
 	public var recorder:AvatarRecorder;
 	public var avatarType:AvatarType;
 	
@@ -36,12 +34,7 @@ class Avatar extends FlxBasic
 		dispatcher = new EventDispatcher();
 		avatarType = p_avatarType;
 		view = new AvatarView(p_x, p_y, this, player.intersections);
-		controller = new AvatarControllerInput(this);
-		//recording = new AvatarRecording();
 		
-		recorder = new AvatarRecorder(this);
-		
-		view.updateAvatarController( controller );
 	}
 	
 	override public function update():Void 
@@ -50,27 +43,37 @@ class Avatar extends FlxBasic
 		
 		controller.update();
 		recorder.update();
-		
-		if ( FlxG.keys.justPressed.SPACE )
+	}
+	
+	public function convertToReplay( p_timeModifier:Float = 1 ):Void
+	{
+		if ( Std.is( controller, AvatarControllerReplay) == false )
 		{
-			if ( Std.is( controller, AvatarControllerInput ) )
-			{
-				tryAndDestroy( cast(controller) );
-				controller = new AvatarControllerReplay(this, recorder.recording,-5);
-				
-				tryAndDestroy( recorder );
-				recorder = new AvatarRecorder(this);
-			}
-			else
-			{
-				tryAndDestroy( cast(controller) );
-				controller = new AvatarControllerInput(this);
-				
-				tryAndDestroy( recorder );
-				recorder = new AvatarRecorder(this);
-			}
+			tryAndDestroy( cast(controller) );
+			controller = new AvatarControllerReplay(this, recorder.recording.clone(),p_timeModifier);
+			
+			view.updateAvatarController( controller );
+		}
+		else
+		{
+			var l_recording:AvatarRecording = cast( controller, AvatarControllerReplay).recording.clone();
+			tryAndDestroy( cast(controller) );
+			controller = new AvatarControllerReplay(this, l_recording,p_timeModifier);
 		}
 		
+		tryAndDestroy( recorder );
+		recorder = new AvatarRecorder(this);
+	}
+	
+	public function convertToUserControlled():Void
+	{
+		tryAndDestroy( cast(controller) );
+		controller = new AvatarControllerInput(this);
+		
+		tryAndDestroy( recorder );
+		recorder = new AvatarRecorder(this);
+		
+		view.updateAvatarController( controller );
 	}
 	
 	static private function tryAndDestroy( p_basic:FlxBasic ):Void

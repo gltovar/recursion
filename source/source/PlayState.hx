@@ -1,14 +1,10 @@
 package;
 
-import flixel.effects.particles.FlxEmitter;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.group.FlxTypedGroup;
-import flixel.group.FlxTypedSpriteGroup;
-import flixel.text.FlxText;
 import flixel.tile.FlxTilemap;
-import flixel.util.FlxArrayUtil;
 import flixel.util.FlxPath;
 import flixel.util.FlxPoint;
 import flixel.util.FlxStringUtil;
@@ -20,11 +16,7 @@ class PlayState extends FlxState
 {
 	private var _map:FlxTilemap;
 	private var _mapCollisions:FlxTilemap;
-	//private var _intersections:FlxTilemap;
 	private var _intersections:FlxTypedGroup<IntersectionNode>;
-	//private var _avatar:Avatar;
-	private var _player:Player;
-	private var _player2:Player;
 	
 	override public function create():Void
 	{			
@@ -76,36 +68,26 @@ class PlayState extends FlxState
 		add( _intersections );
 		
 		
-		_player = new Player(_intersections, InputMap.WSAD, 16, 176);	
-		_player2 = new Player(_intersections, InputMap.ARROW_KEYS, 330, 176);
+		new Player(_intersections, InputMap.WSAD, 16, 176);	
+		new Player(_intersections, InputMap.ARROW_KEYS, 330, 176);
 		
 		add( Reg.AVATAR_VIEWS );
-		
-		//FlxArrayUtil.
-		
-		// Then add the player, its own class with its own logic
-		
-		/*_avatar = new Avatar(32, 176);
-		add(_avatar);
-		_avatar.intersections = _intersections;*/
-		
 	}
 	
 	override public function update():Void
 	{
 		super.update();
 		
-		
 		FlxG.collide(Reg.AVATAR_VIEWS, _mapCollisions );
-		//FlxG.collide(_player.controllingAvatar.view, _mapCollisions);
-		//FlxG.collide(_player2.controllingAvatar.view, _mapCollisions);
 		
 		if (FlxG.keys.justReleased.ENTER)
 		{
 			FlxG.switchState(new PlayState2());
 		}
 		
-		_player.update();
-		_player2.update();
+		for ( l_player in Reg.PLAYERS )
+		{
+			l_player.update();
+		}
 	}
 }

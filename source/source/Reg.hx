@@ -1,8 +1,7 @@
 package ;
+import avatar.AvatarType;
 import avatar.AvatarView;
 import flixel.group.FlxTypedGroup;
-import flixel.util.FlxPoint;
-import flixel.util.FlxVector;
 import input.DirectionVector;
 import player.Player;
 /**
@@ -28,8 +27,8 @@ class Reg
 	
 	public static var AVATAR_VIEWS:FlxTypedGroup<AvatarView> = new FlxTypedGroup<AvatarView>();
 	
-	public static var ROCKS:FlxTypedGroup<AvatarView> = new FlxTypedGroup<AvatarView>();
-	public static var PAPERS:FlxTypedGroup<AvatarView> = new FlxTypedGroup<AvatarView>();
-	public static var SCISSORS:FlxTypedGroup<AvatarView> = new FlxTypedGroup<AvatarView>();
+	public static var AVATAR_TYPES_MAP:Map < AvatarType, FlxTypedGroup<AvatarView> > = [AvatarType.ROCK => new FlxTypedGroup<AvatarView>(),
+																						AvatarType.PAPER => new FlxTypedGroup<AvatarView>(),
+																						AvatarType.SCISSORS => new FlxTypedGroup<AvatarView>()];
 	
 }

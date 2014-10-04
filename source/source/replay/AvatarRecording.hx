@@ -9,10 +9,22 @@ class AvatarRecording
 	private var _replayFrames:Array<ReplayFrame>;
 	private var _currentFrameIndex:Int;
 	
-	public function new() 
+	public function new( p_replayFrames:Array<ReplayFrame> = null ) 
 	{
-		_replayFrames = new Array<ReplayFrame>();
+		if ( p_replayFrames != null )
+		{
+			_replayFrames = p_replayFrames;
+		}
+		else
+		{
+			_replayFrames = new Array<ReplayFrame>();
+		}
 		_currentFrameIndex = 0;
+	}
+	
+	public function clone():AvatarRecording
+	{
+		return new AvatarRecording( _replayFrames );
 	}
 	
 	public function addFrame( p_replayFrame:ReplayFrame, p_push:Bool = true )
@@ -88,6 +100,16 @@ class AvatarRecording
 	public function skipToBeginning():Void
 	{
 		_currentFrameIndex = 0;
+	}
+	
+	public function atBeginning():Bool
+	{
+		return _currentFrameIndex == 0;
+	}
+	
+	public function atEnd():Bool
+	{
+		return _currentFrameIndex == _replayFrames.length;
 	}
 	
 	public function getTotalDurationInTime():Float

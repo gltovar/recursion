@@ -1,5 +1,6 @@
 package input;
 
+import avatar.Avatar;
 import avatar.AvatarView;
 import flixel.FlxBasic;
 import flixel.FlxG;
@@ -10,7 +11,6 @@ import flixel.util.FlxPoint;
 import flixel.util.FlxRandom;
 import intersections.IntersectionNode;
 import openfl.events.EventDispatcher;
-import avatar.Avatar;
 
 /**
  * ...
@@ -20,18 +20,14 @@ class AvatarControllerInput extends FlxBasic implements IAvatarController
 {
 	public var dispatcher(default, null):EventDispatcher;
 	public var intersections:FlxTypedGroup<IntersectionNode>;
-
+	public var currentDirection(default, null):Directions;
+	
 	private var avatar:Avatar;
 	private static inline var INPUT_MAX_RELEASE_TIME:Int = 300;
-	private var _currentIntersection:IntersectionNode = null;
-	public var currentDirection(default, null):Directions;
-	private var _timeLastPressed:Map<Directions, Int>; 
-	
-	
+	private var _currentIntersection:IntersectionNode = null;	
+	private var _timeLastPressed:Map<Directions, Int>;
 	private var _prevPassedThroughCenter:Bool = false;
 	private var _intendedDirection:Directions = Directions.NONE;
-	
-
 	
 	public function new( p_avatar:Avatar ) 
 	{

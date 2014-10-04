@@ -8,10 +8,9 @@ import intersections.IntersectionNode;
 
 class AvatarView extends FlxSprite
 {
-	//public var player(default,null):Player;
-	public var avatar(default, null):Avatar;
-	
 	private static inline var INPUT_MAX_RELEASE_TIME:Int = 300;
+	
+	public var avatar(default, null):Avatar;	
 	
 	private var _avatarController:IAvatarController;
 	
@@ -26,7 +25,6 @@ class AvatarView extends FlxSprite
 		width = 16;
 		height = 16;
 		centerOffsets();
-		
 	}
 	
 	override public function update():Void
