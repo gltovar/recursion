@@ -7,7 +7,6 @@ package avatar;
 enum AvatarState 
 {
 	Waiting;
-	Controlling;
-	Replaying;
+	Playing;
 	Rewinding;
 }

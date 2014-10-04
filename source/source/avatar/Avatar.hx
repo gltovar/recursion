@@ -6,6 +6,7 @@ import input.AvatarControllerReplay;
 import input.IAvatarController;
 import openfl.events.EventDispatcher;
 import player.Player;
+import player.PlayerState;
 import replay.AvatarRecorder;
 import replay.AvatarRecording;
 
@@ -42,27 +43,24 @@ class Avatar extends FlxBasic
 		super.update();
 		
 		controller.update();
-		recorder.update();
+		
+		if ( player.state == PlayerState.PLAYING )
+		{
+			recorder.update();
+		}
+		
 	}
 	
 	public function convertToReplay( p_timeModifier:Float = 1 ):Void
 	{
-		if ( Std.is( controller, AvatarControllerReplay) == false )
-		{
-			tryAndDestroy( cast(controller) );
-			controller = new AvatarControllerReplay(this, recorder.recording.clone(),p_timeModifier);
-			
-			view.updateAvatarController( controller );
-		}
-		else
-		{
-			var l_recording:AvatarRecording = cast( controller, AvatarControllerReplay).recording.clone();
-			tryAndDestroy( cast(controller) );
-			controller = new AvatarControllerReplay(this, l_recording,p_timeModifier);
-		}
+		tryAndDestroy( cast(controller) );
+		controller = new AvatarControllerReplay(this, recorder.recording.clone(),p_timeModifier);		
 		
-		tryAndDestroy( recorder );
-		recorder = new AvatarRecorder(this);
+		if ( player.state != PlayerState.START_REWINDING )
+		{
+			tryAndDestroy( recorder );
+			recorder = new AvatarRecorder(this);
+		}
 	}
 	
 	public function convertToUserControlled():Void
