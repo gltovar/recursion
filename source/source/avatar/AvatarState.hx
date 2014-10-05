@@ -6,7 +6,8 @@ package avatar;
 
 enum AvatarState 
 {
-	Waiting;
-	Playing;
-	Rewinding;
+	WAITING;
+	ALIVE;
+	DEAD;
+	REWINDING;
 }

@@ -48,11 +48,6 @@ class AvatarControllerInput extends FlxBasic implements IAvatarController
 		
 	}
 	
-	public function atIntersection():Void
-	{
-		avatar.view.color = FlxColor.RED;
-	}
-	
 	private function updateVelocity( p_direction:Directions )
 	{
 		if ( p_direction == null )
@@ -77,7 +72,6 @@ class AvatarControllerInput extends FlxBasic implements IAvatarController
 		if ( _currentIntersection == null || _currentIntersection != p_intersectionNode )
 		{
 			_currentIntersection = p_intersectionNode;
-			avatar.view.color = FlxRandom.color(100, 255);
 			_prevPassedThroughCenter = false;
 		}
 	}
@@ -191,7 +185,7 @@ class AvatarControllerInput extends FlxBasic implements IAvatarController
 		if ( _currentIntersection != null && avatar.view.overlaps(_currentIntersection) == false )
 		{
 			_currentIntersection = null;
-			avatar.view.color = FlxColor.WHITE;
+			//avatar.view.color = FlxColor.WHITE;
 		}
 		
 		if ( _currentIntersection != null )

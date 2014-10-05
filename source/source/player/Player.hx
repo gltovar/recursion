@@ -56,12 +56,8 @@ class Player extends FlxBasic
 				choosing();
 			case PlayerState.WAITING:
 				waiting();
-			case PlayerState.START_PLAYING:
-				startPlaying();
 			case PlayerState.PLAYING:
 				playing();
-			case PlayerState.START_REWINDING:
-				startRewinding();
 			case PlayerState.REWINDING:
 				rewinding();
 		}
@@ -95,8 +91,6 @@ class Player extends FlxBasic
 					Reg.AVATAR_TYPES_MAP[l_avatarType].add( controllingAvatar.view );
 				}
 				
-				updateControls();
-				
 				switchState( PlayerState.WAITING );
 				break;
 			}
@@ -109,22 +103,25 @@ class Player extends FlxBasic
 		{
 			if ( l_avatar != controllingAvatar )
 			{
-				l_avatar.convertToReplay();
+				l_avatar.play(false);
 			}
 			else
 			{
-				l_avatar.convertToUserControlled();
+				l_avatar.play(true);
 			}
+			
+			l_avatar.view.color = Reg.PLAYER_COLORS[ Reg.PLAYERS.indexOf(this) ];
 		}	
 	}
 	
 	private function waiting():Void
 	{
-		switchState( PlayerState.START_PLAYING );
+		startPlaying();
 	}
 	
 	private function startPlaying():Void
 	{
+		updateControls();
 		switchState( PlayerState.PLAYING );
 	}
 	
@@ -134,18 +131,18 @@ class Player extends FlxBasic
 		
 		if ( FlxG.keys.justPressed.SPACE )
 		{
-			switchState( PlayerState.START_REWINDING );
+			startRewinding();
 		}
 	}
 	
 	private function startRewinding():Void
 	{
+		switchState( PlayerState.REWINDING );
+		
 		for ( l_avatar in _avatarMap )
 		{
-			l_avatar.convertToReplay( -3 );
+			l_avatar.rewind();
 		}
-		
-		switchState( PlayerState.REWINDING );
 	}
 	
 	private function rewinding():Void

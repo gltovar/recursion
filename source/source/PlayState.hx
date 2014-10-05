@@ -1,10 +1,13 @@
 package;
 
+import avatar.AvatarType;
+import avatar.AvatarView;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.group.FlxTypedGroup;
 import flixel.tile.FlxTilemap;
+import flixel.util.FlxColor;
 import flixel.util.FlxPath;
 import flixel.util.FlxPoint;
 import flixel.util.FlxStringUtil;
@@ -80,6 +83,11 @@ class PlayState extends FlxState
 		
 		FlxG.collide(Reg.AVATAR_VIEWS, _mapCollisions );
 		
+		for ( l_avatarType in AvatarType.TYPES )
+		{
+			FlxG.overlap( Reg.AVATAR_TYPES_MAP[ l_avatarType ], Reg.AVATAR_TYPES_MAP[ AvatarType.WEAK_TO[ l_avatarType]], onWeaknessOverlap );
+		}
+		
 		if (FlxG.keys.justReleased.ENTER)
 		{
 			FlxG.switchState(new PlayState2());
@@ -88,6 +96,14 @@ class PlayState extends FlxState
 		for ( l_player in Reg.PLAYERS )
 		{
 			l_player.update();
+		}
+	}
+	
+	private function onWeaknessOverlap( p_weakView:AvatarView, p_view:AvatarView ):Void
+	{
+		if ( p_view.avatar.player != p_weakView.avatar.player )
+		{
+			p_weakView.color = FlxColor.BLACK;
 		}
 	}
 }

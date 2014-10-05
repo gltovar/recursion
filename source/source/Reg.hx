@@ -2,6 +2,7 @@ package ;
 import avatar.AvatarType;
 import avatar.AvatarView;
 import flixel.group.FlxTypedGroup;
+import flixel.util.FlxColor;
 import input.DirectionVector;
 import player.Player;
 /**
@@ -24,6 +25,8 @@ class Reg
 																				Directions.RIGHT 	=> Directions.LEFT ];
 																					
 	public static var PLAYERS:Array<Player> = [];
+	
+	public static var PLAYER_COLORS:Array<Int> = [FlxColor.RED, FlxColor.GREEN, FlxColor.BLUE, FlxColor.YELLOW]; 
 	
 	public static var AVATAR_VIEWS:FlxTypedGroup<AvatarView> = new FlxTypedGroup<AvatarView>();
 	

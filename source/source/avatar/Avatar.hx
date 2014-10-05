@@ -1,6 +1,7 @@
 package avatar;
 
 import flixel.FlxBasic;
+import flixel.FlxG;
 import input.AvatarControllerInput;
 import input.AvatarControllerReplay;
 import input.IAvatarController;
@@ -22,6 +23,7 @@ class Avatar extends FlxBasic
 	public var controller:IAvatarController;
 	public var recorder:AvatarRecorder;
 	public var avatarType:AvatarType;
+	public var state(default, null):AvatarState;
 	
 	
 	public function new( p_player:Player, p_avatarType:AvatarType, p_x:Float, p_y:Float ) 
@@ -30,11 +32,13 @@ class Avatar extends FlxBasic
 		
 		revive();
 		
-		
+		state = AvatarState.WAITING;
 		player = p_player;
 		dispatcher = new EventDispatcher();
 		avatarType = p_avatarType;
 		view = new AvatarView(p_x, p_y, this, player.intersections);
+		
+		FlxG.watch.add(this, "state", "avatar state: " );
 		
 	}
 	
@@ -42,28 +46,88 @@ class Avatar extends FlxBasic
 	{
 		super.update();
 		
-		controller.update();
-		
-		if ( player.state == PlayerState.PLAYING )
+		switch(state)
 		{
-			recorder.update();
+			case AvatarState.WAITING:
+				waiting();
+			case AvatarState.ALIVE:
+				stateAlive();
+			case AvatarState.DEAD:
+				dead();
+			case AvatarState.REWINDING:
+				rewinding();
 		}
+	}
+	
+	private function switchState( p_state:AvatarState ):Void
+	{
+		state = p_state;
+	}
+	
+	private function waiting():Void
+	{
 		
 	}
 	
-	public function convertToReplay( p_timeModifier:Float = 1 ):Void
+	private function stateAlive():Void
+	{
+		controller.update();
+		recorder.update();
+		
+		if ( isReplay() && cast(controller, AvatarControllerReplay).recording.atEnd() )
+		{
+			switchState( AvatarState.DEAD );
+		}
+	}
+	
+	private function dead():Void
+	{
+		recorder.update();
+	}
+	
+	private function rewinding():Void
+	{
+		controller.update();
+		
+		if ( cast(controller, AvatarControllerReplay).recording.atBeginning() )
+		{
+			switchState( AvatarState.WAITING );
+		}
+	}
+	
+	public function rewind():Void
+	{
+		convertToReplay( -3, false);
+		switchState( AvatarState.REWINDING );
+	}
+	
+	public function play( p_userControlled:Bool ):Void
+	{
+		if ( p_userControlled )
+		{
+			convertToUserControlled();
+		}
+		else
+		{
+			convertToReplay();
+		}
+		
+		switchState( AvatarState.ALIVE );
+	}
+	
+	private function convertToReplay( p_timeModifier:Float = 1, p_destroyRecording:Bool = true ):Void
 	{
 		tryAndDestroy( cast(controller) );
 		controller = new AvatarControllerReplay(this, recorder.recording.clone(),p_timeModifier);		
 		
-		if ( player.state != PlayerState.START_REWINDING )
+		if ( p_destroyRecording )
 		{
 			tryAndDestroy( recorder );
 			recorder = new AvatarRecorder(this);
 		}
 	}
 	
-	public function convertToUserControlled():Void
+	private function convertToUserControlled():Void
 	{
 		tryAndDestroy( cast(controller) );
 		controller = new AvatarControllerInput(this);
@@ -80,6 +144,11 @@ class Avatar extends FlxBasic
 		{
 			p_basic.destroy;
 		}
+	}
+	
+	public function isReplay():Bool
+	{
+		return Std.is(controller, AvatarControllerReplay);
 	}
 	
 }
