@@ -88,11 +88,6 @@ class PlayState extends FlxState
 			FlxG.overlap( Reg.AVATAR_TYPES_MAP[ l_avatarType ], Reg.AVATAR_TYPES_MAP[ AvatarType.WEAK_TO[ l_avatarType]], onWeaknessOverlap );
 		}
 		
-		if (FlxG.keys.justReleased.ENTER)
-		{
-			FlxG.switchState(new PlayState2());
-		}
-		
 		for ( l_player in Reg.PLAYERS )
 		{
 			l_player.update();
