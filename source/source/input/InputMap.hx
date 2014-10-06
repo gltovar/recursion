@@ -16,6 +16,11 @@ class InputMap
 															function():Bool { return FlxG.keys.pressed.S; },
 															function():Bool { return FlxG.keys.pressed.A; },
 															function():Bool { return FlxG.keys.pressed.D; } );
+															
+	static public var IKJL:InputMap = new InputMap( 		function():Bool { return FlxG.keys.pressed.I; },
+															function():Bool { return FlxG.keys.pressed.K; },
+															function():Bool { return FlxG.keys.pressed.J; },
+															function():Bool { return FlxG.keys.pressed.L; } );
 	
 	
 	public var inputMap:Map < Directions, Void->Bool > ;

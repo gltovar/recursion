@@ -93,7 +93,7 @@ class Avatar extends FlxBasic
 	
 	private function killAvatar():Void
 	{
-		view.color = FlxColor.BLACK;
+		view.color = FlxColor.CHARCOAL;
 		switchState( AvatarState.DEAD );
 	}
 	
@@ -114,7 +114,7 @@ class Avatar extends FlxBasic
 	
 	public function rewind():Void
 	{
-		convertToReplay( -3, false);
+		convertToReplay( -3, false, true);
 		switchState( AvatarState.REWINDING );
 	}
 	
@@ -133,10 +133,10 @@ class Avatar extends FlxBasic
 		switchState( AvatarState.ALIVE );
 	}
 	
-	private function convertToReplay( p_timeModifier:Float = 1, p_destroyRecording:Bool = true ):Void
+	private function convertToReplay( p_timeModifier:Float = 1, p_destroyRecording:Bool = true, p_manualFrames:Bool = false ):Void
 	{
 		tryAndDestroy( cast(controller) );
-		controller = new AvatarControllerReplay(this, recorder.recording.clone(),p_timeModifier);		
+		controller = new AvatarControllerReplay(this, recorder.recording.clone(),p_timeModifier, p_manualFrames);		
 		
 		if ( p_destroyRecording )
 		{

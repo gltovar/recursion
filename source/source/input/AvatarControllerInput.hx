@@ -74,6 +74,7 @@ class AvatarControllerInput extends FlxBasic implements IAvatarController
 		{
 			_currentIntersection = p_intersectionNode;
 			_prevPassedThroughCenter = false;
+			
 		}
 	}
 	
@@ -119,11 +120,12 @@ class AvatarControllerInput extends FlxBasic implements IAvatarController
 		if( _currentIntersection != null)
 		{
 			
-			
 			var l_passedThoughCenterTest:Bool = passedThroughCenterTest();
 			var l_amountPassedCenter:Int = FlxMath.distanceBetween(avatar.view, _currentIntersection);
-			if ( FlxMath.distanceBetween(avatar.view, _currentIntersection) <= 4 )
+			if ( FlxMath.getDistance(avatar.view.getScreenXY(), _currentIntersection.getScreenXY()) <= 4 )
 			{
+				
+				//avatar.view.color = FlxRandom.colorExt(128, 255, 128, 255, 0, 0);
 				var l_newDirection:Directions = Directions.NONE;
 				var l_lowestDirectionTime:Int = 0;
 				for (l_direction in _currentIntersection.validDirections)
@@ -137,12 +139,14 @@ class AvatarControllerInput extends FlxBasic implements IAvatarController
 				
 				if (l_newDirection != Directions.NONE &&  l_passedThoughCenterTest)
 				{
+					
 					if (  l_newDirection != currentDirection)
 					{
 						if ( l_passedThoughCenterTest != _prevPassedThroughCenter ) // Just Passed thoug the center
-						{
+						{	
 							if (l_newDirection != Reg.OPPOSITE_DIRECTION[ currentDirection ] && l_newDirection != currentDirection )
 							{
+								
 								l_directionVector = Reg.DIRECTION_VECTORS[ l_newDirection ];
 								avatar.view.setPosition( _currentIntersection.x, _currentIntersection.y );
 								

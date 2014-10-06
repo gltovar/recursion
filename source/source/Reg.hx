@@ -26,7 +26,7 @@ class Reg
 																					
 	public static var PLAYERS:Array<Player> = [];
 	
-	public static var PLAYER_COLORS:Array<Int> = [FlxColor.RED, FlxColor.GREEN, FlxColor.BLUE, FlxColor.YELLOW]; 
+	public static var PLAYER_COLORS:Array<Int> = [FlxColor.SALMON, FlxColor.CHARTREUSE, FlxColor.AZURE, FlxColor.WHEAT]; 
 	
 	public static var AVATAR_VIEWS:FlxTypedGroup<AvatarView> = new FlxTypedGroup<AvatarView>();
 	

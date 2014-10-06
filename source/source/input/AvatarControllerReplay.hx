@@ -21,9 +21,10 @@ class AvatarControllerReplay extends FlxBasic implements IAvatarController
 	private var _runTime:Float;
 	private var _timeModifier:Float;
 	private var _stepDirection:Int;
+	private var _manualFrames:Bool;
 	
 	
-	public function new( p_avatar:Avatar, p_recording:AvatarRecording, p_timeModifier:Float = 1 ) 
+	public function new( p_avatar:Avatar, p_recording:AvatarRecording, p_timeModifier:Float = 1, p_manualFrames:Bool = false ) 
 	{
 		super();
 		
@@ -32,6 +33,7 @@ class AvatarControllerReplay extends FlxBasic implements IAvatarController
 		avatar = p_avatar;
 		recording = p_recording;
 		_timeModifier = p_timeModifier;
+		_manualFrames = p_manualFrames;
 		
 		if ( _timeModifier < 0 )
 		{
@@ -76,6 +78,10 @@ class AvatarControllerReplay extends FlxBasic implements IAvatarController
 			if ( l_replayFrame != null )
 			{
 				avatar.view.setPosition( l_replayFrame.position.x, l_replayFrame.position.y );
+				if ( _manualFrames )
+				{
+					avatar.view.animation.frameIndex = l_replayFrame.animationFrame;
+				}
 				
 				if ( currentDirection != l_replayFrame.direction )
 				{

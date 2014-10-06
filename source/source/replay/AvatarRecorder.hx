@@ -34,7 +34,7 @@ class AvatarRecorder extends FlxBasic
 		if ( avatar != null )
 		{
 			currentTime += FlxG.elapsed;
-			recording.addFrame( ReplayFrame.get( currentTime, FlxPoint.get(avatar.view.x, avatar.view.y), avatar.controller.currentDirection, avatar.alive) );
+			recording.addFrame( ReplayFrame.get( currentTime, FlxPoint.get(avatar.view.x, avatar.view.y), avatar.controller.currentDirection, avatar.alive, avatar.view.animation.curAnim.curIndex ) );
 			//trace(recording.currentFrame().toString());
 		}
 	}

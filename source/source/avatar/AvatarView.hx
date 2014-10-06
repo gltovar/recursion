@@ -1,8 +1,10 @@
 package avatar; 
 
+import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxTypedGroup;
 import avatar.AvatarEvent;
+import flixel.util.FlxPoint;
 import input.IAvatarController;
 import intersections.IntersectionNode;
 
@@ -20,9 +22,22 @@ class AvatarView extends FlxSprite
 		
 		avatar = p_avatar;
 		
-		loadGraphic(avatar.avatarType.graphics, true);
-		width = 16;
-		height = 16;
+		//loadGraphic(avatar.avatarType.graphics, true);
+		
+		loadGraphicFromTexture( avatar.avatarType.texture );
+		
+		for ( l_characterAnimation in avatar.avatarType.animations )
+		{
+			animation.addByPrefix( 	l_characterAnimation.name.getName(),
+									l_characterAnimation.prefix, 
+									l_characterAnimation.frameRate,
+									l_characterAnimation.looped );
+		}
+		
+		FlxG.watch.add(animation, "name");
+		
+		
+		setSize(16, 16);
 		centerOffsets();
 		
 		revive();
@@ -38,12 +53,47 @@ class AvatarView extends FlxSprite
 	override public function update():Void
 	{
 		super.update();
+		
+		switch( avatar.state )
+		{
+			case AvatarState.ALIVE:
+				updateAnimation( CharacterAnimation.WALK.getName() );
+				
+			case AvatarState.DEAD:
+				velocity.set(0, 0);
+				updateAnimation( CharacterAnimation.DIE.getName() );
+				
+			case AvatarState.REWINDING:
+				updateAnimation( CharacterAnimation.WALK.getName() );
+			
+			case AvatarState.WAITING:
+				updateAnimation( CharacterAnimation.WALK.getName() );
+				
+		}
+	}
+	
+	public function updateAnimation( p_animationName:String ):Void
+	{
+		if (animation.name == CharacterAnimation.ATTACK.getName() && !animation.finished )
+		{
+			return;
+		}
+		
+		if ( animation.name != p_animationName )
+		{	
+			animation.play( p_animationName );
+		}
 	}
 	
 	public function freeze():Void
 	{
 		alive = false;
 		velocity.set(0, 0);
+	}
+	
+	public function attack():Void
+	{
+		animation.play(CharacterAnimation.ATTACK.getName());
 	}
 	
 	public function updateAvatarController( p_avatarController:IAvatarController ):Void

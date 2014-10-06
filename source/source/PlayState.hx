@@ -3,6 +3,7 @@ package;
 import avatar.AvatarType;
 import avatar.AvatarView;
 import flixel.FlxG;
+import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.group.FlxTypedGroup;
@@ -10,6 +11,7 @@ import flixel.tile.FlxTilemap;
 import flixel.util.FlxColor;
 import flixel.util.FlxPath;
 import flixel.util.FlxPoint;
+import flixel.util.FlxSort;
 import flixel.util.FlxStringUtil;
 import input.InputMap;
 import intersections.IntersectionNode;
@@ -17,9 +19,11 @@ import player.Player;
 
 class PlayState extends FlxState
 {
+	
 	private var _map:FlxTilemap;
 	private var _mapCollisions:FlxTilemap;
 	private var _intersections:FlxTypedGroup<IntersectionNode>;
+	
 	
 	override public function create():Void
 	{			
@@ -73,6 +77,8 @@ class PlayState extends FlxState
 		
 		new Player(_intersections, InputMap.WSAD, 16, 176);	
 		new Player(_intersections, InputMap.ARROW_KEYS, 330, 176);
+		new Player(_intersections, InputMap.IKJL, 175, 368);
+		
 		
 		add( Reg.AVATAR_VIEWS );
 	}
@@ -86,6 +92,7 @@ class PlayState extends FlxState
 		for ( l_avatarType in AvatarType.TYPES )
 		{
 			FlxG.overlap( Reg.AVATAR_TYPES_MAP[ l_avatarType ], Reg.AVATAR_TYPES_MAP[ AvatarType.WEAK_TO[ l_avatarType]], onWeaknessOverlap );
+			FlxG.collide( Reg.AVATAR_TYPES_MAP[ l_avatarType], Reg.AVATAR_TYPES_MAP[ l_avatarType ], onSameCollide );
 		}
 		
 		for ( l_player in Reg.PLAYERS )
@@ -96,9 +103,26 @@ class PlayState extends FlxState
 	
 	private function onWeaknessOverlap( p_weakView:AvatarView, p_view:AvatarView ):Void
 	{
-		if ( p_view.alive && p_view.avatar.player != p_weakView.avatar.player )
+		if ( p_weakView.alive && p_view.alive && p_view.avatar.player != p_weakView.avatar.player )
 		{
 			p_weakView.freeze();
+			p_view.attack();
+			
+			Reg.AVATAR_VIEWS.sort( byAlive );
 		}
+	}
+	
+	private function onSameCollide( p_view1:AvatarView, p_view2:AvatarView ):Void
+	{
+		if ( p_view1.alive && p_view2.alive )
+		{
+			p_view1.velocity.set(0, 0);
+			p_view2.velocity.set(0, 0);
+		}
+	}
+	
+	private static inline function byAlive( p_order:Int, p_obj1:FlxObject, p_obj2:FlxObject):Int
+	{
+		return FlxSort.byValues( p_order, cast(p_obj1.alive) , cast(p_obj2.alive) );
 	}
 }
