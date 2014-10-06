@@ -72,7 +72,7 @@ class PlayState extends FlxState
 			}
 			++l_indexRow;
 		}
-		//add( _intersections );
+		add( _intersections );
 		
 		
 		new Player(_intersections, InputMap.WSAD, 16, 176);	
