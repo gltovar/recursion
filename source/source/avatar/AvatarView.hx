@@ -2,7 +2,7 @@ package avatar;
 
 import flixel.FlxSprite;
 import flixel.group.FlxTypedGroup;
-import input.AvatarControllerEvent;
+import avatar.AvatarEvent;
 import input.IAvatarController;
 import intersections.IntersectionNode;
 
@@ -21,10 +21,18 @@ class AvatarView extends FlxSprite
 		avatar = p_avatar;
 		
 		loadGraphic(avatar.avatarType.graphics, true);
-		maxVelocity.set( 100, 100 );
 		width = 16;
 		height = 16;
 		centerOffsets();
+		
+		revive();
+	}
+	
+	override public function revive():Void 
+	{
+		super.revive();
+		
+		maxVelocity.set( 100, 100 );
 	}
 	
 	override public function update():Void
@@ -32,18 +40,24 @@ class AvatarView extends FlxSprite
 		super.update();
 	}
 	
+	public function freeze():Void
+	{
+		alive = false;
+		velocity.set(0, 0);
+	}
+	
 	public function updateAvatarController( p_avatarController:IAvatarController ):Void
 	{
 		if ( _avatarController != null )
 		{
-			_avatarController.dispatcher.removeEventListener( AvatarControllerEvent.DIRECTION_CHANGE, onDirectionChange );
+			_avatarController.dispatcher.removeEventListener( AvatarEvent.DIRECTION_CHANGE, onDirectionChange );
 		}
 		
 		_avatarController = p_avatarController;
-		_avatarController.dispatcher.addEventListener( AvatarControllerEvent.DIRECTION_CHANGE, onDirectionChange, false, 0, true );
+		_avatarController.dispatcher.addEventListener( AvatarEvent.DIRECTION_CHANGE, onDirectionChange, false, 0, true );
 	}
 	
-	private function onDirectionChange( e:AvatarControllerEvent ):Void
+	private function onDirectionChange( e:AvatarEvent ):Void
 	{
 		//currentDirection = _avatarController.currentDirection;
 	}

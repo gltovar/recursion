@@ -1,6 +1,7 @@
 package input;
 
 import avatar.Avatar;
+import avatar.AvatarEvent;
 import avatar.AvatarView;
 import flixel.FlxBasic;
 import flixel.FlxG;
@@ -64,7 +65,7 @@ class AvatarControllerInput extends FlxBasic implements IAvatarController
 		
 		
 		currentDirection = p_direction;
-		dispatcher.dispatchEvent(new AvatarControllerEvent( AvatarControllerEvent.DIRECTION_CHANGE ) );
+		dispatcher.dispatchEvent(new AvatarEvent( AvatarEvent.DIRECTION_CHANGE ) );
 	}
 	
 	private function onIntersectionOverlap( p_player:AvatarView, p_intersectionNode:IntersectionNode ):Void

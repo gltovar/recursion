@@ -101,9 +101,9 @@ class PlayState extends FlxState
 	
 	private function onWeaknessOverlap( p_weakView:AvatarView, p_view:AvatarView ):Void
 	{
-		if ( p_view.avatar.player != p_weakView.avatar.player )
+		if ( p_view.alive && p_view.avatar.player != p_weakView.avatar.player )
 		{
-			p_weakView.color = FlxColor.BLACK;
+			p_weakView.freeze();
 		}
 	}
 }

@@ -2,6 +2,7 @@ package avatar;
 
 import flixel.FlxBasic;
 import flixel.FlxG;
+import flixel.util.FlxColor;
 import input.AvatarControllerInput;
 import input.AvatarControllerReplay;
 import input.IAvatarController;
@@ -74,10 +75,26 @@ class Avatar extends FlxBasic
 		controller.update();
 		recorder.update();
 		
-		if ( isReplay() && cast(controller, AvatarControllerReplay).recording.atEnd() )
+		if ( view.alive == false )
 		{
-			switchState( AvatarState.DEAD );
+			killAvatar();
 		}
+		
+		if ( isReplay() )
+		{
+			var l_avatarReplay:AvatarControllerReplay = cast(controller, AvatarControllerReplay);
+			
+			if (  l_avatarReplay.recording.atEnd() || l_avatarReplay.recording.currentFrame().alive == false )
+			{
+				killAvatar();
+			}
+		}
+	}
+	
+	private function killAvatar():Void
+	{
+		view.color = FlxColor.BLACK;
+		switchState( AvatarState.DEAD );
 	}
 	
 	private function dead():Void
@@ -103,6 +120,7 @@ class Avatar extends FlxBasic
 	
 	public function play( p_userControlled:Bool ):Void
 	{
+		view.revive();
 		if ( p_userControlled )
 		{
 			convertToUserControlled();

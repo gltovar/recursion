@@ -1,4 +1,4 @@
-package input;
+package avatar ;
 
 import openfl.events.Event;
 
@@ -6,7 +6,7 @@ import openfl.events.Event;
  * ...
  * @author 
  */
-class AvatarControllerEvent extends Event
+class AvatarEvent extends Event
 {
 	static public inline var DIRECTION_CHANGE:String = "AvatarControllerEvent.DirectionChange";
 

@@ -1,5 +1,6 @@
 package input;
 import avatar.Avatar;
+import avatar.AvatarEvent;
 import flixel.FlxBasic;
 import flixel.FlxG;
 import openfl.events.EventDispatcher;
@@ -78,7 +79,7 @@ class AvatarControllerReplay extends FlxBasic implements IAvatarController
 				
 				if ( currentDirection != l_replayFrame.direction )
 				{
-					dispatcher.dispatchEvent( new AvatarControllerEvent(AvatarControllerEvent.DIRECTION_CHANGE) );
+					dispatcher.dispatchEvent( new AvatarEvent(AvatarEvent.DIRECTION_CHANGE) );
 					currentDirection = l_replayFrame.direction;
 				}
 			}
