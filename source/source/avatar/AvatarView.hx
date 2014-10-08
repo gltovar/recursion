@@ -35,10 +35,8 @@ class AvatarView extends FlxSprite
 		}
 		
 		FlxG.watch.add(animation, "name");
-		
-		
 		setSize(16, 16);
-		centerOffsets();
+		offset.set( avatar.avatarType.offset.x, avatar.avatarType.offset.y );
 		
 		revive();
 	}

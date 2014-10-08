@@ -16,6 +16,7 @@ import flixel.util.FlxStringUtil;
 import input.InputMap;
 import intersections.IntersectionNode;
 import player.Player;
+import player.PlayerManager;
 
 class PlayState extends FlxState
 {
@@ -23,7 +24,7 @@ class PlayState extends FlxState
 	private var _map:FlxTilemap;
 	private var _mapCollisions:FlxTilemap;
 	private var _intersections:FlxTypedGroup<IntersectionNode>;
-	
+	private var _playerManager:PlayerManager;
 	
 	override public function create():Void
 	{			
@@ -75,9 +76,11 @@ class PlayState extends FlxState
 		add( _intersections );
 		
 		
+		_playerManager = new PlayerManager();
+		
 		new Player(_intersections, InputMap.WSAD, 16, 176);	
 		new Player(_intersections, InputMap.ARROW_KEYS, 330, 176);
-		new Player(_intersections, InputMap.IKJL, 175, 368);
+		//new Player(_intersections, InputMap.IKJL, 175, 368);
 		
 		
 		add( Reg.AVATAR_VIEWS );
@@ -86,6 +89,8 @@ class PlayState extends FlxState
 	override public function update():Void
 	{
 		super.update();
+		
+		_playerManager.update();
 		
 		FlxG.collide(Reg.AVATAR_VIEWS, _mapCollisions );
 		

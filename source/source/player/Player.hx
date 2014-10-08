@@ -63,6 +63,17 @@ class Player extends FlxBasic
 		}
 	}
 	
+	public function hasChosen():Bool
+	{
+		return state == PlayerState.WAITING;
+	}
+	
+	public function startPlaying():Void
+	{
+		updateControls();
+		switchState( PlayerState.PLAYING );
+	}
+	
 	private function switchState( p_newState:PlayerState ):Void
 	{
 		state = p_newState;
@@ -116,26 +127,20 @@ class Player extends FlxBasic
 	
 	private function waiting():Void
 	{
-		startPlaying();
-	}
-	
-	private function startPlaying():Void
-	{
-		updateControls();
-		switchState( PlayerState.PLAYING );
+		
 	}
 	
 	private function playing():Void
 	{
 		updateAvatars();
 		
-		if ( FlxG.keys.justPressed.SPACE )
+		/*if ( FlxG.keys.justPressed.SPACE )
 		{
 			startRewinding();
-		}
+		}*/
 	}
 	
-	private function startRewinding():Void
+	public function startRewinding():Void
 	{
 		switchState( PlayerState.REWINDING );
 		

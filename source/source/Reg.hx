@@ -11,6 +11,7 @@ import player.Player;
  */
 class Reg
 {
+	public static var GAME_DURATION:Float = 30;
 	
 	public static var DIRECTION_LIST:Array<Directions> = [Directions.UP, Directions.DOWN, Directions.LEFT, Directions.RIGHT];
 

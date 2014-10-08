@@ -1,4 +1,5 @@
 package avatar;
+import flixel.util.FlxPoint;
 
 /**
  * ...
@@ -11,6 +12,7 @@ class AnimationInfo
 	public var prefix:String;
 	public var frameRate:Int;
 	public var looped:Bool;
+	
 	
 	public function new( p_name:CharacterAnimation, p_prefix:String, p_frameRate:Int, p_looped:Bool )
 	{
