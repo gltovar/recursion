@@ -2,6 +2,8 @@ package;
 
 import avatar.AvatarType;
 import avatar.AvatarView;
+import flixel.addons.ui.FlxUI;
+import flixel.addons.ui.U;
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
@@ -13,6 +15,7 @@ import flixel.util.FlxPath;
 import flixel.util.FlxPoint;
 import flixel.util.FlxSort;
 import flixel.util.FlxStringUtil;
+import haxe.xml.Fast;
 import input.InputMap;
 import intersections.IntersectionNode;
 import player.Player;
@@ -28,10 +31,11 @@ class PlayState extends FlxState
 	
 	override public function create():Void
 	{			
-		FlxG.mouse.visible = false;
 		
 		// Background
 		FlxG.state.bgColor = 0xffacbcd7;
+		
+		
 		
 		var path:FlxPath;
 		var sprite:FlxSprite;
@@ -66,7 +70,7 @@ class PlayState extends FlxState
 				if ( l_columns[ l_indexColumn ] == "1" )
 				{
 					//trace("Found a node!");
-					l_intersectionNode = new IntersectionNode( new FlxPoint( l_indexColumn, l_indexRow ), 16, 16, _mapCollisions );
+					l_intersectionNode = new IntersectionNode( new FlxPoint( l_indexColumn, l_indexRow ), 32, 32, _mapCollisions );
 					_intersections.add( l_intersectionNode );
 				}
 				++l_indexColumn;
@@ -77,17 +81,25 @@ class PlayState extends FlxState
 		
 		
 		_playerManager = new PlayerManager();
+		Reg.PLAYER_MANAGER = _playerManager;
 		
-		new Player(_intersections, InputMap.WSAD, 16, 176);	
-		new Player(_intersections, InputMap.ARROW_KEYS, 330, 176);
+		new Player(_intersections, InputMap.WSAD, FlxPoint.get(32, 352), FlxPoint.get(24, 264) );	
+		new Player(_intersections, InputMap.ARROW_KEYS, FlxPoint.get(660, 352), FlxPoint.get(586, 264) );
+		new Player(_intersections, InputMap.IKJL, FlxPoint.get(360, 738), FlxPoint.get(148, 678) );
+		new Player(_intersections, InputMap.NUM_KEYS, FlxPoint.get(358, 130), FlxPoint.get(292, 168) );
 		//new Player(_intersections, InputMap.IKJL, 175, 368);
 		
 		
 		add( Reg.AVATAR_VIEWS );
+		add( Reg.PLAYER_UI_LAYER);
+		
+		
 	}
 	
 	override public function update():Void
 	{
+		//FlxG.log.add( "mouse: " + FlxG.mouse.getScreenPosition() );
+		
 		super.update();
 		
 		_playerManager.update();

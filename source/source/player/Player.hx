@@ -2,8 +2,11 @@ package player ;
 
 import avatar.Avatar;
 import avatar.AvatarType;
+import flixel.addons.ui.FlxUI;
+import flixel.addons.ui.U;
 import flixel.FlxBasic;
 import flixel.FlxG;
+import flixel.FlxSprite;
 import flixel.group.FlxTypedGroup;
 import flixel.util.FlxPoint;
 import input.AvatarControllerReplay;
@@ -26,14 +29,20 @@ class Player extends FlxBasic
 	public var controllingAvatar:Avatar;
 	public  var inputMap:InputMap;
 	public var intersections:FlxTypedGroup<IntersectionNode>;
-	public var state(default, null):PlayerState = PlayerState.INIT;
+	public var state(default, null):PlayerState;
+	public var ui:PlayerUIManager;
+	public var uiPoint:FlxPoint;
 	
 	private var _spawningPoint:FlxPoint;
+	
 	private var _avatarMap:Map<AvatarType, Avatar>;
 	
-	public function new(p_intersections:FlxTypedGroup<IntersectionNode>, p_inputMap:InputMap, p_x:Float, p_y:Float) 
+	
+	public function new(p_intersections:FlxTypedGroup<IntersectionNode>, p_inputMap:InputMap, p_spawnPoint:FlxPoint, p_uiPoint:FlxPoint) 
 	{
 		super();
+		
+		
 		
 		dispatcher = new EventDispatcher();
 		_avatarMap = new Map<AvatarType, Avatar>();
@@ -41,7 +50,13 @@ class Player extends FlxBasic
 		Reg.PLAYERS.push( this );
 		inputMap = p_inputMap;
 		intersections = p_intersections;	
-		_spawningPoint = FlxPoint.get( p_x, p_y );
+		_spawningPoint = p_spawnPoint;
+		uiPoint = p_uiPoint;
+		
+		ui = new PlayerUIManager(this);
+		init();
+		
+		//add( new FlxUI( U.xml("player_ui") ) );
 	}
 	
 	override public function update():Void 
@@ -50,8 +65,8 @@ class Player extends FlxBasic
 		
 		switch( state )
 		{
-			case PlayerState.INIT:
-				init();
+			case PlayerState.NOT_JOINED:
+				notJoined();
 			case PlayerState.CHOOSING:
 				choosing();
 			case PlayerState.WAITING:
@@ -68,10 +83,21 @@ class Player extends FlxBasic
 		return state == PlayerState.WAITING;
 	}
 	
+	public function hasJoined():Bool
+	{
+		return state != PlayerState.NOT_JOINED;
+	}
+	
 	public function startPlaying():Void
 	{
+		ui.showChoices();
 		updateControls();
 		switchState( PlayerState.PLAYING );
+	}
+	
+	public function wait():Void
+	{
+		ui.showWait();
 	}
 	
 	private function switchState( p_newState:PlayerState ):Void
@@ -79,9 +105,10 @@ class Player extends FlxBasic
 		state = p_newState;
 	}
 	
-	private function init():Void
+	public function init():Void
 	{
-		switchState(PlayerState.CHOOSING);
+		ui.showJoin();
+		switchState(PlayerState.NOT_JOINED);
 	}
 	
 	private function choosing():Void
@@ -102,6 +129,7 @@ class Player extends FlxBasic
 					Reg.AVATAR_TYPES_MAP[l_avatarType].add( controllingAvatar.view );
 				}
 				
+				ui.showReady();
 				switchState( PlayerState.WAITING );
 				break;
 			}
@@ -123,6 +151,19 @@ class Player extends FlxBasic
 			
 			l_avatar.view.color = Reg.PLAYER_COLORS[ Reg.PLAYERS.indexOf(this) ];
 		}	
+	}
+	
+	private function notJoined():Void
+	{
+		if ( Reg.PLAYER_MANAGER.state == GameState.CHOOSING )
+		{
+			// press down to join
+			if ( inputMap.inputMap[ Directions.DOWN ]() )
+			{
+				ui.showChoices();
+				switchState( PlayerState.CHOOSING );
+			}
+		}
 	}
 	
 	private function waiting():Void
@@ -162,6 +203,7 @@ class Player extends FlxBasic
 			}
 		}
 		
+		ui.showChoices();
 		// if every previous frame is null then we are finished
 		switchState(PlayerState.CHOOSING);
 	}

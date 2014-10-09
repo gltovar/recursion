@@ -41,20 +41,27 @@ class PlayerManager extends FlxBasic
 	
 	private function choosing():Void
 	{
-		if ( Reg.PLAYERS.length == 0 )
-		{
-			return;
-		}
+		var l_readyPlayers = 0;
 		
 		for ( l_player in Reg.PLAYERS )
 		{
-			if ( l_player.hasChosen() == false )
+			if ( l_player.hasJoined())
 			{
-				return;
+				if ( l_player.hasChosen() )
+				{
+					++l_readyPlayers;
+				}
+				else
+				{
+					return;
+				}
 			}
 		}
 		
-		startPlaying();
+		if ( l_readyPlayers >= Reg.MIN_PLAYERS )
+		{
+			startPlaying();
+		}
 	}
 	
 	private function startPlaying():Void
@@ -63,7 +70,14 @@ class PlayerManager extends FlxBasic
 		
 		for ( l_player in Reg.PLAYERS )
 		{
-			l_player.startPlaying();
+			if ( l_player.hasJoined() )
+			{
+				l_player.startPlaying();
+			}
+			else
+			{
+				l_player.wait();
+			}
 		}
 		
 		switchState( GameState.PLAYING );
@@ -83,7 +97,10 @@ class PlayerManager extends FlxBasic
 	{
 		for ( l_player in Reg.PLAYERS )
 		{
-			l_player.startRewinding();
+			if ( l_player.hasJoined() )
+			{
+				l_player.startRewinding();
+			}
 		}
 		
 		switchState( GameState.REWINDING );
@@ -93,9 +110,20 @@ class PlayerManager extends FlxBasic
 	{
 		for ( l_player in Reg.PLAYERS )
 		{
-			if ( l_player.state == PlayerState.REWINDING )
+			if ( l_player.hasJoined() )
 			{
-				return;
+				if ( l_player.state == PlayerState.REWINDING )
+				{
+					return;
+				}
+			}
+		}
+		
+		for ( l_player in Reg.PLAYERS )
+		{
+			if ( l_player.hasJoined() == false )
+			{
+				l_player.init();
 			}
 		}
 		

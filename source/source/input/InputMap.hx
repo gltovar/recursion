@@ -21,6 +21,11 @@ class InputMap
 															function():Bool { return FlxG.keys.pressed.K; },
 															function():Bool { return FlxG.keys.pressed.J; },
 															function():Bool { return FlxG.keys.pressed.L; } );
+															
+	static public var NUM_KEYS:InputMap = new InputMap( 		function():Bool { return FlxG.keys.pressed.FIVE; },
+															function():Bool { return FlxG.keys.pressed.TWO; },
+															function():Bool { return FlxG.keys.pressed.ONE; },
+															function():Bool { return FlxG.keys.pressed.THREE; } );
 	
 	
 	public var inputMap:Map < Directions, Void->Bool > ;

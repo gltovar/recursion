@@ -6,7 +6,7 @@ package player;
 
 enum PlayerState 
 {
-	INIT;
+	NOT_JOINED;
 	CHOOSING;
 	WAITING;
 	PLAYING;

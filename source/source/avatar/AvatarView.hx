@@ -35,7 +35,7 @@ class AvatarView extends FlxSprite
 		}
 		
 		FlxG.watch.add(animation, "name");
-		setSize(16, 16);
+		setSize(32, 32);
 		offset.set( avatar.avatarType.offset.x, avatar.avatarType.offset.y );
 		
 		revive();
@@ -45,7 +45,7 @@ class AvatarView extends FlxSprite
 	{
 		super.revive();
 		
-		maxVelocity.set( 100, 100 );
+		maxVelocity.set( 150, 150 );
 	}
 	
 	override public function update():Void

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<data>
+	<chrome id="back" slice9="4,4,8,8" width="128" height="48" />
+	
+	<button id="button_rock" x="8" y="8" width="32" height="32" label="R">
+		<text size="24"/>
+		<anchor x="back.left" x-flush="left" y="back.top" y-flush="top"/>
+	</button>
+	
+	<button id="button_paper" x="8" y="8" width="32" height="32" label="P">
+		<text size="24"/>
+		<anchor x="button_rock.right" x-flush="left" y="back.top" y-flush="top"/>
+	</button>
+	
+	<button id="button_scissors" x="8" y="8" width="32" height="32" label="S">
+		<text size="24"/>
+		<anchor x="button_paper.right" x-flush="left" y="back.top" y-flush="top"/>
+	</button>
+	
+	<text id="text_ready" x="8" y="8" size="24" text="READY" width="back.width" height="back.height" align="center">
+			<anchor x="back.left" x-flush="left" y="back.top" y-flush="top" />
+	</text>
+	
+	<text id="text_join" x="8" y="8" size="24" text="JOIN" width="back.width" height="back.height" align="center">
+			<anchor x="back.left" x-flush="left" y="back.top" y-flush="top" />
+	</text>
+	
+	<text id="text_wait" x="8" y="8" size="24" text="WAIT" width="back.width" height="back.height" align="center">
+			<anchor x="back.left" x-flush="left" y="back.top" y-flush="top" />
+	</text>
+	
+	<mode id="mode_join">
+		<show id="text_join"/>
+		
+		<hide id="text_wait"/>
+		<hide id="text_ready"/>
+		<hide id="button_rock"/>
+		<hide id="button_paper"/>
+		<hide id="button_scissors"/>
+	</mode>
+	
+	<mode id="mode_show_choices">
+		<show id="button_rock"/>
+		<show id="button_paper"/>
+		<show id="button_scissors"/>
+		
+		<hide id="text_wait"/>
+		<hide id="text_join"/>
+		<hide id="text_ready"/>
+		
+	</mode>
+	
+	<mode id="mode_ready">
+		<show id="text_ready"/>
+		
+		<hide id="text_wait"/>
+		<hide id="text_join"/>
+		<hide id="button_rock"/>
+		<hide id="button_paper"/>
+		<hide id="button_scissors"/>
+	</mode>
+	
+	<mode id="mode_wait">
+		<show id="text_wait"/>
+		
+		<hide id="text_ready"/>
+		<hide id="text_join"/>
+		<hide id="button_rock"/>
+		<hide id="button_paper"/>
+		<hide id="button_scissors"/>
+	</mode>
+</data>
