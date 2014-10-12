@@ -2,6 +2,7 @@ package ;
 import avatar.AvatarType;
 import avatar.AvatarView;
 import flixel.addons.ui.FlxUI;
+import flixel.FlxSprite;
 import flixel.group.FlxTypedGroup;
 import flixel.util.FlxColor;
 import input.DirectionVector;
@@ -14,7 +15,7 @@ import player.PlayerManager;
 class Reg
 {
 	public static var MIN_PLAYERS:Int = 2;
-	public static var GAME_DURATION:Float = 30;
+	public static var GAME_DURATION:Float = 8;
 	
 	public static var DIRECTION_LIST:Array<Directions> = [Directions.UP, Directions.DOWN, Directions.LEFT, Directions.RIGHT];
 
@@ -28,17 +29,16 @@ class Reg
 																				Directions.LEFT 	=> Directions.RIGHT,
 																				Directions.RIGHT 	=> Directions.LEFT ];
 																					
-	public static var PLAYERS:Array<Player> = [];
 	
-	public static var PLAYER_COLORS:Array<Int> = [FlxColor.SALMON, FlxColor.CHARTREUSE, FlxColor.AZURE, FlxColor.WHEAT]; 
+	public static var PLAYER_COLORS:Array<Int> = [FlxColor.SALMON, FlxColor.CHARTREUSE, FlxColor.AZURE, FlxColor.WHEAT];
+																				
+	public static var PLAYERS:Array<Player>; 
 	
-	public static var AVATAR_VIEWS:FlxTypedGroup<AvatarView> = new FlxTypedGroup<AvatarView>();
+	public static var AVATAR_VIEWS:FlxTypedGroup<AvatarView>;
 	
-	public static var AVATAR_TYPES_MAP:Map < AvatarType, FlxTypedGroup<AvatarView> > = [AvatarType.ROCK => new FlxTypedGroup<AvatarView>(),
-																						AvatarType.PAPER => new FlxTypedGroup<AvatarView>(),
-																						AvatarType.SCISSORS => new FlxTypedGroup<AvatarView>()];
+	public static var AVATAR_TYPES_MAP:Map < AvatarType, FlxTypedGroup<AvatarView> >;
 	
-	public static var PLAYER_UI_LAYER:FlxTypedGroup<FlxUI> = new FlxTypedGroup<FlxUI>();
+	public static var PLAYER_UI_LAYER:FlxTypedGroup<FlxSprite>;
 	
 	public static var PLAYER_MANAGER:PlayerManager;
 }

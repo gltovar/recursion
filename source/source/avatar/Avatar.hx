@@ -25,6 +25,7 @@ class Avatar extends FlxBasic
 	public var recorder:AvatarRecorder;
 	public var avatarType:AvatarType;
 	public var state(default, null):AvatarState;
+	public var frozen(default, null):Bool;
 	
 	
 	public function new( p_player:Player, p_avatarType:AvatarType, p_x:Float, p_y:Float ) 
@@ -39,8 +40,7 @@ class Avatar extends FlxBasic
 		avatarType = p_avatarType;
 		view = new AvatarView(p_x, p_y, this, player.intersections);
 		
-		FlxG.watch.add(this, "state", "avatar state: " );
-		
+		//FlxG.watch.add(this, "state", "avatar state: " );
 	}
 	
 	override public function update():Void 
@@ -58,6 +58,8 @@ class Avatar extends FlxBasic
 			case AvatarState.REWINDING:
 				rewinding();
 		}
+		
+		frozen = !view.alive;
 	}
 	
 	private function switchState( p_state:AvatarState ):Void
@@ -93,7 +95,6 @@ class Avatar extends FlxBasic
 	
 	private function killAvatar():Void
 	{
-		view.color = FlxColor.CHARCOAL;
 		switchState( AvatarState.DEAD );
 	}
 	

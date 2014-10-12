@@ -32,17 +32,18 @@ class Player extends FlxBasic
 	public var state(default, null):PlayerState;
 	public var ui:PlayerUIManager;
 	public var uiPoint:FlxPoint;
+	public var id(default, null):String;
 	
 	private var _spawningPoint:FlxPoint;
 	
 	private var _avatarMap:Map<AvatarType, Avatar>;
-	
+	private var _choice:AvatarType;
 	
 	public function new(p_intersections:FlxTypedGroup<IntersectionNode>, p_inputMap:InputMap, p_spawnPoint:FlxPoint, p_uiPoint:FlxPoint) 
 	{
 		super();
 		
-		
+		id = "Player " + Reg.PLAYERS.length;
 		
 		dispatcher = new EventDispatcher();
 		_avatarMap = new Map<AvatarType, Avatar>();
@@ -90,6 +91,17 @@ class Player extends FlxBasic
 	
 	public function startPlaying():Void
 	{
+		var l_prevControllingAvatar:Avatar = controllingAvatar;
+		
+		controllingAvatar = _avatarMap[_choice];
+		if ( controllingAvatar == null )
+		{
+			controllingAvatar = new Avatar(this, _choice, _spawningPoint.x, _spawningPoint.y);
+			_avatarMap[_choice] = controllingAvatar;
+			Reg.AVATAR_VIEWS.add( controllingAvatar.view );
+			Reg.AVATAR_TYPES_MAP[_choice].add( controllingAvatar.view );
+		}
+		
 		ui.showChoices();
 		updateControls();
 		switchState( PlayerState.PLAYING );
@@ -117,21 +129,14 @@ class Player extends FlxBasic
 		{
 			if ( inputMap.inputMap[ l_key ]() )
 			{
-				var l_avatarType:AvatarType = CHOICE_MAP[l_key];
-				var l_prevControllingAvatar:Avatar = controllingAvatar;
-				
-				controllingAvatar = _avatarMap[l_avatarType];
-				if ( controllingAvatar == null )
+				var l_choice:AvatarType = CHOICE_MAP[l_key];
+				if ( _avatarMap[ l_choice ] == null || _avatarMap[ l_choice ].frozen == false )
 				{
-					controllingAvatar = new Avatar(this, CHOICE_MAP[l_key] , _spawningPoint.x, _spawningPoint.y);
-					_avatarMap[l_avatarType] = controllingAvatar;
-					Reg.AVATAR_VIEWS.add( controllingAvatar.view );
-					Reg.AVATAR_TYPES_MAP[l_avatarType].add( controllingAvatar.view );
+					_choice = l_choice;
+					ui.showReady();
+					switchState( PlayerState.WAITING );
+					break;
 				}
-				
-				ui.showReady();
-				switchState( PlayerState.WAITING );
-				break;
 			}
 		}
 	}
@@ -189,6 +194,34 @@ class Player extends FlxBasic
 		{
 			l_avatar.rewind();
 		}
+	}
+	
+	// check if a player has an avatar to play
+	public function allAvatarsDead():Bool
+	{
+		if ( hasJoined() )
+		{
+			for ( l_avatarType in AvatarType.TYPES )
+			{
+				var l_avatar:Avatar = _avatarMap[ l_avatarType ];
+				if ( l_avatar == null || l_avatar.frozen == false )
+				{
+					return false;
+				}
+			}
+		}
+		
+		return true;
+	}
+	
+	public function isAvatarFrozen( p_avatar:AvatarType ):Bool
+	{
+		if ( _avatarMap[ p_avatar ] == null )
+		{
+			return false;
+		}
+		
+		return _avatarMap[ p_avatar ].frozen;
 	}
 	
 	private function rewinding():Void

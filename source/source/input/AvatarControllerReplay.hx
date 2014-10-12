@@ -23,6 +23,8 @@ class AvatarControllerReplay extends FlxBasic implements IAvatarController
 	private var _stepDirection:Int;
 	private var _manualFrames:Bool;
 	
+	private var _skipAFrame:Int;
+	
 	
 	public function new( p_avatar:Avatar, p_recording:AvatarRecording, p_timeModifier:Float = 1, p_manualFrames:Bool = false ) 
 	{
@@ -48,6 +50,8 @@ class AvatarControllerReplay extends FlxBasic implements IAvatarController
 		
 		_runTime = p_recording.currentFrame().timestamp;
 		currentDirection = Directions.NONE;
+		
+		avatar.dispatcher.addEventListener( AvatarEvent.BUMPED, onAvatarBump );
 	}
 	
 	private function determinNextPosition():Void
@@ -70,6 +74,11 @@ class AvatarControllerReplay extends FlxBasic implements IAvatarController
 		super.update();
 		if ( recording != null )
 		{
+			if ( _skipAFrame > 0 )
+			{
+				--_skipAFrame;
+				return;
+			}
 			_runTime += FlxG.elapsed * _timeModifier;
 			
 			determinNextPosition();
@@ -92,8 +101,19 @@ class AvatarControllerReplay extends FlxBasic implements IAvatarController
 		}	
 	}
 	
+	private function onAvatarBump(e:AvatarEvent):Void
+	{
+		//FlxG.log.add("bump detected");
+		if ( avatar.player.state == player.PlayerState.PLAYING )
+		{
+			_skipAFrame = 1;
+		}
+		
+	}
+	
 	override public function destroy():Void 
 	{
+		avatar.dispatcher.removeEventListener( AvatarEvent.BUMPED, onAvatarBump );
 		recording.destroy();
 		super.destroy();
 	}

@@ -3,6 +3,7 @@ package;
 import avatar.AvatarType;
 import avatar.AvatarView;
 import flixel.addons.ui.FlxUI;
+import flixel.addons.ui.FlxUIState;
 import flixel.addons.ui.U;
 import flixel.FlxG;
 import flixel.FlxObject;
@@ -21,7 +22,7 @@ import intersections.IntersectionNode;
 import player.Player;
 import player.PlayerManager;
 
-class PlayState extends FlxState
+class PlayState extends FlxUIState
 {
 	
 	private var _map:FlxTilemap;
@@ -32,10 +33,18 @@ class PlayState extends FlxState
 	override public function create():Void
 	{			
 		
+		// init statics
+		Reg.PLAYERS = [];
+		Reg.AVATAR_VIEWS = new FlxTypedGroup<AvatarView>();
+		Reg.AVATAR_TYPES_MAP = [	AvatarType.ROCK => new FlxTypedGroup<AvatarView>(),
+									AvatarType.PAPER => new FlxTypedGroup<AvatarView>(),
+									AvatarType.SCISSORS => new FlxTypedGroup<AvatarView>() ];
+		Reg.PLAYER_UI_LAYER = new FlxTypedGroup<FlxSprite>();
+		
+		
+		
 		// Background
 		FlxG.state.bgColor = 0xffacbcd7;
-		
-		
 		
 		var path:FlxPath;
 		var sprite:FlxSprite;
@@ -96,11 +105,32 @@ class PlayState extends FlxState
 		
 	}
 	
+	override public function destroy():Void 
+	{
+		
+		Reg.AVATAR_VIEWS.destroy();
+		for ( l_type in AvatarType.TYPES )
+		{
+			Reg.AVATAR_TYPES_MAP[ l_type ].destroy();
+		}
+		
+		Reg.PLAYER_UI_LAYER.destroy();
+		
+		Reg.PLAYER_MANAGER.destroy();
+		
+		super.destroy();
+	}
+	
 	override public function update():Void
 	{
 		//FlxG.log.add( "mouse: " + FlxG.mouse.getScreenPosition() );
 		
 		super.update();
+		
+		for ( l_player in Reg.PLAYERS )
+		{
+			l_player.update();
+		}
 		
 		_playerManager.update();
 		
@@ -109,13 +139,10 @@ class PlayState extends FlxState
 		for ( l_avatarType in AvatarType.TYPES )
 		{
 			FlxG.overlap( Reg.AVATAR_TYPES_MAP[ l_avatarType ], Reg.AVATAR_TYPES_MAP[ AvatarType.WEAK_TO[ l_avatarType]], onWeaknessOverlap );
-			FlxG.collide( Reg.AVATAR_TYPES_MAP[ l_avatarType], Reg.AVATAR_TYPES_MAP[ l_avatarType ], onSameCollide );
+			FlxG.overlap( Reg.AVATAR_TYPES_MAP[ l_avatarType], Reg.AVATAR_TYPES_MAP[ l_avatarType ], onSameOverlap );
 		}
 		
-		for ( l_player in Reg.PLAYERS )
-		{
-			l_player.update();
-		}
+		
 	}
 	
 	private function onWeaknessOverlap( p_weakView:AvatarView, p_view:AvatarView ):Void
@@ -129,12 +156,13 @@ class PlayState extends FlxState
 		}
 	}
 	
-	private function onSameCollide( p_view1:AvatarView, p_view2:AvatarView ):Void
+	private function onSameOverlap( p_view1:AvatarView, p_view2:AvatarView ):Void
 	{
-		if ( p_view1.alive && p_view2.alive )
+		if ( p_view1.avatar.player != p_view2.avatar.player && p_view1.alive && p_view2.alive )
 		{
-			p_view1.velocity.set(0, 0);
-			p_view2.velocity.set(0, 0);
+			p_view1.bump();
+			p_view2.bump();
+			FlxG.collide( p_view1, p_view2 );
 		}
 	}
 	

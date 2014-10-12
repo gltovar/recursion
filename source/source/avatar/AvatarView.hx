@@ -4,6 +4,7 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxTypedGroup;
 import avatar.AvatarEvent;
+import flixel.util.FlxColor;
 import flixel.util.FlxPoint;
 import input.IAvatarController;
 import intersections.IntersectionNode;
@@ -44,7 +45,6 @@ class AvatarView extends FlxSprite
 	override public function revive():Void 
 	{
 		super.revive();
-		
 		maxVelocity.set( 150, 150 );
 	}
 	
@@ -85,8 +85,15 @@ class AvatarView extends FlxSprite
 	
 	public function freeze():Void
 	{
+		color = FlxColor.CHARCOAL;
 		alive = false;
 		velocity.set(0, 0);
+	}
+	
+	public function bump():Void
+	{
+		velocity.set(0, 0);
+		avatar.dispatcher.dispatchEvent(new AvatarEvent( AvatarEvent.BUMPED));
 	}
 	
 	public function attack():Void

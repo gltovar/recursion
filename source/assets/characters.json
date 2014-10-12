@@ -1,8 +1,71 @@
 {"frames": [
 
 {
+	"filename": "ball_path_0.png",
+	"frame": {"x":562,"y":32,"w":25,"h":25},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":8,"w":25,"h":25},
+	"sourceSize": {"w":25,"h":41},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "ball_path_1.png",
+	"frame": {"x":562,"y":32,"w":25,"h":25},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":3,"w":25,"h":25},
+	"sourceSize": {"w":25,"h":41},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "ball_path_2.png",
+	"frame": {"x":562,"y":32,"w":25,"h":25},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":0,"w":25,"h":25},
+	"sourceSize": {"w":25,"h":41},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "ball_path_3.png",
+	"frame": {"x":562,"y":32,"w":25,"h":25},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":8,"w":25,"h":25},
+	"sourceSize": {"w":25,"h":41},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "ball_path_4.png",
+	"frame": {"x":562,"y":32,"w":25,"h":25},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":13,"w":25,"h":25},
+	"sourceSize": {"w":25,"h":41},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "ball_path_5.png",
+	"frame": {"x":562,"y":32,"w":25,"h":25},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":16,"w":25,"h":25},
+	"sourceSize": {"w":25,"h":41},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "ball_path_6.png",
+	"frame": {"x":562,"y":32,"w":25,"h":25},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":10,"w":25,"h":25},
+	"sourceSize": {"w":25,"h":41},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
 	"filename": "paper_attack_0.png",
-	"frame": {"x":614,"y":44,"w":31,"h":18},
+	"frame": {"x":633,"y":2,"w":31,"h":18},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":16,"y":33,"w":31,"h":18},
@@ -137,7 +200,7 @@
 },
 {
 	"filename": "rock_attack_6.png",
-	"frame": {"x":581,"y":2,"w":27,"h":19},
+	"frame": {"x":633,"y":22,"w":27,"h":19},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":15,"y":18,"w":27,"h":19},
@@ -146,7 +209,7 @@
 },
 {
 	"filename": "rock_dead_0.png",
-	"frame": {"x":610,"y":2,"w":27,"h":19},
+	"frame": {"x":589,"y":43,"w":27,"h":19},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":15,"y":18,"w":27,"h":19},
@@ -155,7 +218,7 @@
 },
 {
 	"filename": "rock_walk_0.png",
-	"frame": {"x":639,"y":2,"w":27,"h":19},
+	"frame": {"x":618,"y":43,"w":27,"h":19},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":15,"y":18,"w":27,"h":19},
@@ -173,7 +236,7 @@
 },
 {
 	"filename": "rock_walk_2.png",
-	"frame": {"x":614,"y":23,"w":27,"h":19},
+	"frame": {"x":647,"y":43,"w":27,"h":19},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":15,"y":18,"w":27,"h":19},
@@ -227,7 +290,7 @@
 },
 {
 	"filename": "scissors_attack_4.png",
-	"frame": {"x":562,"y":32,"w":50,"h":23},
+	"frame": {"x":581,"y":2,"w":50,"h":23},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":0,"y":12,"w":50,"h":23},
@@ -284,8 +347,8 @@
 	"version": "1.0",
 	"image": "characters.png",
 	"format": "RGBA8888",
-	"size": {"w":668,"h":64},
+	"size": {"w":676,"h":64},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:374a4defd04ed50f7a0d893b5dc77960:597bb1072cb843fd192eac1181b1b88a:a5fe7db4b869eb0f3e0b2940b9577ea8$"
+	"smartupdate": "$TexturePacker:SmartUpdate:03a3cb05925dfb34d80e0d1e7308d668:969a6b5a4b91f9ec64fe4e6698288f32:a5fe7db4b869eb0f3e0b2940b9577ea8$"
 }
 }
