@@ -92,7 +92,7 @@ class AvatarView extends FlxSprite
 	
 	public function bump():Void
 	{
-		velocity.set(0, 0);
+		//velocity.set(0, 0);
 		avatar.dispatcher.dispatchEvent(new AvatarEvent( AvatarEvent.BUMPED));
 	}
 	

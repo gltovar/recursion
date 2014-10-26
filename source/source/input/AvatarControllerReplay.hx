@@ -4,6 +4,7 @@ import avatar.AvatarEvent;
 import flixel.FlxBasic;
 import flixel.FlxG;
 import openfl.events.EventDispatcher;
+import player.PlayerState;
 import replay.AvatarRecording;
 import replay.ReplayFrame;
 
@@ -72,6 +73,11 @@ class AvatarControllerReplay extends FlxBasic implements IAvatarController
 	override public function update():Void 
 	{
 		super.update();
+		if ( avatar.player.state == PlayerState.PLAYING && recording.atBeginning() )
+		{
+			reverseTime();
+		}
+		
 		if ( recording != null )
 		{
 			if ( _skipAFrame > 0 )
@@ -101,12 +107,21 @@ class AvatarControllerReplay extends FlxBasic implements IAvatarController
 		}	
 	}
 	
+	private function reverseTime():Void
+	{
+		_timeModifier *= -1;
+		_stepDirection *= -1;
+	}
+	
 	private function onAvatarBump(e:AvatarEvent):Void
 	{
 		//FlxG.log.add("bump detected");
-		if ( avatar.player.state == player.PlayerState.PLAYING )
+		if ( avatar.player.state == PlayerState.PLAYING )
 		{
-			_skipAFrame = 1;
+			//avatar.view.setPosition( avatar.view.last.x, avatar.view.last.y );
+			reverseTime();
+			FlxG.log.add( "reversing replay" );
+			//_skipAFrame = 1;
 		}
 		
 	}

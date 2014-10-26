@@ -162,7 +162,7 @@ class PlayState extends FlxUIState
 		{
 			p_view1.bump();
 			p_view2.bump();
-			FlxG.collide( p_view1, p_view2 );
+			//FlxG.collide( p_view1, p_view2 );
 		}
 	}
 	

@@ -22,10 +22,10 @@ class InputMap
 															function():Bool { return FlxG.keys.pressed.J; },
 															function():Bool { return FlxG.keys.pressed.L; } );
 															
-	static public var NUM_KEYS:InputMap = new InputMap( 		function():Bool { return FlxG.keys.pressed.FIVE; },
-															function():Bool { return FlxG.keys.pressed.TWO; },
-															function():Bool { return FlxG.keys.pressed.ONE; },
-															function():Bool { return FlxG.keys.pressed.THREE; } );
+	static public var NUM_KEYS:InputMap = new InputMap( 		function():Bool { return FlxG.keys.pressed.NUMPADFIVE; },
+															function():Bool { return FlxG.keys.pressed.NUMPADTWO; },
+															function():Bool { return FlxG.keys.pressed.NUMPADONE; },
+															function():Bool { return FlxG.keys.pressed.NUMPADTHREE; } );
 	
 	
 	public var inputMap:Map < Directions, Void->Bool > ;
