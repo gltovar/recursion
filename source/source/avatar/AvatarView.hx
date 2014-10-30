@@ -6,6 +6,7 @@ import flixel.group.FlxTypedGroup;
 import avatar.AvatarEvent;
 import flixel.util.FlxColor;
 import flixel.util.FlxPoint;
+import flixel.util.FlxSpriteUtil;
 import input.IAvatarController;
 import intersections.IntersectionNode;
 
@@ -93,6 +94,7 @@ class AvatarView extends FlxSprite
 	public function bump():Void
 	{
 		//velocity.set(0, 0);
+		FlxSpriteUtil.flicker( this, Reg.INPUT_BUMP_FREEZE );
 		avatar.dispatcher.dispatchEvent(new AvatarEvent( AvatarEvent.BUMPED));
 	}
 	

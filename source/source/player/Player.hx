@@ -194,11 +194,6 @@ class Player extends FlxBasic
 	private function playing():Void
 	{
 		updateAvatars();
-		
-		/*if ( FlxG.keys.justPressed.SPACE )
-		{
-			startRewinding();
-		}*/
 	}
 	
 	public function startRewinding():Void

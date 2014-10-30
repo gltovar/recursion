@@ -94,9 +94,8 @@ class PlayState extends FlxUIState
 		
 		new Player(_intersections, InputMap.WSAD, FlxPoint.get(32, 352), FlxPoint.get(24, 264) );	
 		new Player(_intersections, InputMap.ARROW_KEYS, FlxPoint.get(660, 352), FlxPoint.get(586, 264) );
-		new Player(_intersections, InputMap.IKJL, FlxPoint.get(360, 738), FlxPoint.get(148, 678) );
+		new Player(_intersections, InputMap.IKJL, FlxPoint.get(360, 736), FlxPoint.get(148, 678) );
 		new Player(_intersections, InputMap.NUM_KEYS, FlxPoint.get(358, 130), FlxPoint.get(292, 168) );
-		//new Player(_intersections, InputMap.IKJL, 175, 368);
 		
 		
 		add( Reg.AVATAR_VIEWS );

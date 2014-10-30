@@ -13,6 +13,7 @@ import flixel.util.FlxRandom;
 import intersections.IntersectionNode;
 import openfl.events.EventDispatcher;
 import openfl.geom.Point;
+import player.PlayerState;
 
 /**
  * ...
@@ -32,6 +33,7 @@ class AvatarControllerInput extends FlxBasic implements IAvatarController
 	private var _intendedDirection:Directions = Directions.NONE;
 	
 	private var _bumped:Bool = false;
+	private var _bumpDuration:Float = 0;
 	//private var _bumpedDirection:Directions = null;
 	private var _prevPoint:FlxPoint;
 	
@@ -107,10 +109,23 @@ class AvatarControllerInput extends FlxBasic implements IAvatarController
 	{
 		super.update();
 		
+		if ( avatar.player.state != PlayerState.PLAYING )
+		{
+			avatar.view.velocity.set(0, 0);
+			return;
+		}
+		
 		if ( _bumped ) 
 		{
-			_bumped = false;
-			return;
+			_bumpDuration += FlxG.elapsed;
+			if ( _bumpDuration > Reg.INPUT_BUMP_FREEZE )
+			{
+				_bumped = false;
+			}
+			else
+			{
+				return;
+			}
 		}
 		
 		if ( FlxMath.getDistance( avatar.view.velocity, FlxPoint.weak() ) == 0 )
@@ -197,7 +212,8 @@ class AvatarControllerInput extends FlxBasic implements IAvatarController
 		else if (avatar.player.inputMap.inputMap[ Reg.OPPOSITE_DIRECTION[currentDirection] ]() )
 		{
 			updateVelocity( Reg.OPPOSITE_DIRECTION[currentDirection] );
-			_bumped = true;
+			//_bumped = true;
+			//_bumpDuration = 0;
 		}
 		
 		if ( _currentIntersection != null && avatar.view.overlaps(_currentIntersection) == false )
@@ -215,8 +231,7 @@ class AvatarControllerInput extends FlxBasic implements IAvatarController
 	private function onAvatarBumped( e:AvatarEvent ):Void
 	{
 		_bumped = true;
-		
-		
+		_bumpDuration = 0;
 		
 		var l_debugText:String = "Player: " + Reg.PLAYERS.indexOf(avatar.player) + " redirection ";
 		

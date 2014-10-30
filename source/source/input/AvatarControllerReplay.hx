@@ -26,6 +26,9 @@ class AvatarControllerReplay extends FlxBasic implements IAvatarController
 	
 	private var _skipAFrame:Int;
 	
+	private var _bumpReverseTime:Float = -1;
+	private var _bumpTimeLessThanCurrentTime:Bool;
+	
 	
 	public function new( p_avatar:Avatar, p_recording:AvatarRecording, p_timeModifier:Float = 1, p_manualFrames:Bool = false ) 
 	{
@@ -73,9 +76,25 @@ class AvatarControllerReplay extends FlxBasic implements IAvatarController
 	override public function update():Void 
 	{
 		super.update();
-		if ( avatar.player.state == PlayerState.PLAYING && recording.atBeginning() )
+		if ( avatar.player.state == PlayerState.PLAYING )
 		{
-			reverseTime();
+			if ( recording.atBeginning() )
+			{
+				reverseTime();
+			}
+			else if( _bumpReverseTime >= 0 )
+			{
+				if ( _bumpTimeLessThanCurrentTime && _runTime < _bumpReverseTime )
+				{
+					reverseTime();
+					_bumpReverseTime = -1;
+				}
+				else if ( _bumpTimeLessThanCurrentTime == false && _runTime > _bumpReverseTime )
+				{
+					reverseTime();
+					_bumpReverseTime = -1;
+				}
+			}
 		}
 		
 		if ( recording != null )
@@ -118,12 +137,10 @@ class AvatarControllerReplay extends FlxBasic implements IAvatarController
 		//FlxG.log.add("bump detected");
 		if ( avatar.player.state == PlayerState.PLAYING )
 		{
-			//avatar.view.setPosition( avatar.view.last.x, avatar.view.last.y );
 			reverseTime();
-			FlxG.log.add( "reversing replay" );
-			//_skipAFrame = 1;
+			_bumpTimeLessThanCurrentTime = _stepDirection < 0;
+			_bumpReverseTime = Math.max(_runTime + (_stepDirection * Reg.INPUT_BUMP_FREEZE), 0);
 		}
-		
 	}
 	
 	override public function destroy():Void 
