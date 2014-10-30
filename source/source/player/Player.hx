@@ -93,13 +93,20 @@ class Player extends FlxBasic
 	{
 		var l_prevControllingAvatar:Avatar = controllingAvatar;
 		
-		controllingAvatar = _avatarMap[_choice];
-		if ( controllingAvatar == null )
+		if ( allAvatarsDead() == false )
 		{
-			controllingAvatar = new Avatar(this, _choice, _spawningPoint.x, _spawningPoint.y);
-			_avatarMap[_choice] = controllingAvatar;
-			Reg.AVATAR_VIEWS.add( controllingAvatar.view );
-			Reg.AVATAR_TYPES_MAP[_choice].add( controllingAvatar.view );
+			controllingAvatar = _avatarMap[_choice];
+			if ( controllingAvatar == null )
+			{
+				controllingAvatar = new Avatar(this, _choice, _spawningPoint.x, _spawningPoint.y);
+				_avatarMap[_choice] = controllingAvatar;
+				Reg.AVATAR_VIEWS.add( controllingAvatar.view );
+				Reg.AVATAR_TYPES_MAP[_choice].add( controllingAvatar.view );
+			}
+		}
+		else
+		{
+			controllingAvatar = null;
 		}
 		
 		ui.showChoices();
@@ -125,6 +132,14 @@ class Player extends FlxBasic
 	
 	private function choosing():Void
 	{
+		if ( allAvatarsDead() )
+		{
+			_choice = null;
+			ui.showReady();
+			switchState( PlayerState.WAITING );
+			return;
+		}
+		
 		for ( l_key in CHOICE_MAP.keys() )
 		{
 			if ( inputMap.inputMap[ l_key ]() )
