@@ -109,6 +109,8 @@ class AvatarControllerInput extends FlxBasic implements IAvatarController
 	{
 		super.update();
 		
+		avatar.player.path.addPathNode( Reg.AVATAR_TO_PATH[ avatar.avatarType ], avatar.view.x, avatar.view.y );
+		
 		if ( avatar.player.state != PlayerState.PLAYING )
 		{
 			avatar.view.velocity.set(0, 0);

@@ -191,6 +191,7 @@
             <filename>scissors_sprites</filename>
             <filename>paper_sprites</filename>
             <filename>rock_sprites</filename>
+            <filename>non_overlapping_path_sprites</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

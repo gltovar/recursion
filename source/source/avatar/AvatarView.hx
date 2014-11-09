@@ -57,6 +57,7 @@ class AvatarView extends FlxSprite
 		{
 			case AvatarState.ALIVE:
 				updateAnimation( CharacterAnimation.WALK.getName() );
+				avatar.player.path.addPathNode( Reg.AVATAR_PATH_MAP[avatar.avatarType], x, y );
 				
 			case AvatarState.DEAD:
 				velocity.set(0, 0);

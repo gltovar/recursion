@@ -13,6 +13,7 @@ import input.AvatarControllerReplay;
 import input.InputMap;
 import intersections.IntersectionNode;
 import openfl.events.EventDispatcher;
+import replay.PlayerPath;
 
 /**
  * ...
@@ -33,11 +34,13 @@ class Player extends FlxBasic
 	public var ui:PlayerUIManager;
 	public var uiPoint:FlxPoint;
 	public var id(default, null):String;
+	public var path:PlayerPath;
 	
 	private var _spawningPoint:FlxPoint;
 	
 	private var _avatarMap:Map<AvatarType, Avatar>;
 	private var _choice:AvatarType;
+	
 	
 	public function new(p_intersections:FlxTypedGroup<IntersectionNode>, p_inputMap:InputMap, p_spawnPoint:FlxPoint, p_uiPoint:FlxPoint) 
 	{
@@ -47,6 +50,8 @@ class Player extends FlxBasic
 		
 		dispatcher = new EventDispatcher();
 		_avatarMap = new Map<AvatarType, Avatar>();
+		path = new PlayerPath();
+		path.reset(0, 0);
 		
 		Reg.PLAYERS.push( this );
 		inputMap = p_inputMap;
@@ -111,12 +116,16 @@ class Player extends FlxBasic
 		
 		ui.showChoices();
 		updateControls();
+		Reg.PLAYER_UI_LAYER.remove( path );
+		path.reset(0, 0);
 		switchState( PlayerState.PLAYING );
 	}
 	
 	public function wait():Void
 	{
 		ui.showWait();
+		
+		//this.path.drawPaths();
 	}
 	
 	private function switchState( p_newState:PlayerState ):Void
@@ -248,6 +257,8 @@ class Player extends FlxBasic
 		
 		ui.showChoices();
 		// if every previous frame is null then we are finished
+		path.drawPaths();
+		Reg.PLAYER_UI_LAYER.add( path );
 		switchState(PlayerState.CHOOSING);
 	}
 	
