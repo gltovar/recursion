@@ -17,7 +17,7 @@ import replay.PlayerPath;
 class Reg
 {
 	public static var MIN_PLAYERS:Int = 2;
-	public static var GAME_DURATION:Float = 6;
+	public static var GAME_DURATION:Float = 15;
 	public static var TILE_SIDE:Float = 32;
 	
 	public static var INPUT_BUMP_FREEZE:Float = .3;
