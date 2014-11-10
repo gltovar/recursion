@@ -136,6 +136,11 @@ class Avatar extends FlxBasic
 	
 	private function convertToReplay( p_timeModifier:Float = 1, p_destroyRecording:Bool = true, p_manualFrames:Bool = false ):Void
 	{
+		if ( Std.is( controller, AvatarControllerReplay ) )
+		{
+			cast( controller, AvatarControllerReplay ).placeAvatarAtBeginningOfReplay();
+		}
+		
 		tryAndDestroy( cast(controller) );
 		controller = new AvatarControllerReplay(this, recorder.recording.clone(),p_timeModifier, p_manualFrames);		
 		

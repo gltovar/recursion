@@ -52,6 +52,7 @@ class Player extends FlxBasic
 		_avatarMap = new Map<AvatarType, Avatar>();
 		path = new PlayerPath();
 		path.reset(0, 0);
+		path.color = Reg.PLAYER_COLORS[Reg.PLAYERS.indexOf(this)];
 		
 		Reg.PLAYERS.push( this );
 		inputMap = p_inputMap;
@@ -118,6 +119,7 @@ class Player extends FlxBasic
 		updateControls();
 		Reg.PLAYER_UI_LAYER.remove( path );
 		path.reset(0, 0);
+		path.color = Reg.PLAYER_COLORS[Reg.PLAYERS.indexOf(this)];
 		switchState( PlayerState.PLAYING );
 	}
 	
@@ -255,10 +257,16 @@ class Player extends FlxBasic
 			}
 		}
 		
+		for ( l_avatar in _avatarMap )
+		{
+			cast(l_avatar.controller, AvatarControllerReplay).placeAvatarAtEndOfReplay();
+		}
+		
 		ui.showChoices();
 		// if every previous frame is null then we are finished
 		path.drawPaths();
-		Reg.PLAYER_UI_LAYER.add( path );
+		Reg.PLAYER_UI_LAYER.add( path ); 
+		
 		switchState(PlayerState.CHOOSING);
 	}
 	

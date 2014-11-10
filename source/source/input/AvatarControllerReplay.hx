@@ -3,6 +3,7 @@ import avatar.Avatar;
 import avatar.AvatarEvent;
 import flixel.FlxBasic;
 import flixel.FlxG;
+import flixel.util.FlxPoint;
 import openfl.events.EventDispatcher;
 import player.PlayerState;
 import replay.AvatarRecording;
@@ -40,6 +41,7 @@ class AvatarControllerReplay extends FlxBasic implements IAvatarController
 		recording = p_recording;
 		_timeModifier = p_timeModifier;
 		_manualFrames = p_manualFrames;
+		avatar.view.velocity.set(0, 0);
 		
 		if ( _timeModifier < 0 )
 		{
@@ -124,6 +126,22 @@ class AvatarControllerReplay extends FlxBasic implements IAvatarController
 				}
 			}
 		}	
+	}
+	
+	public function placeAvatarAtEndOfReplay():Void
+	{
+		recording.skipToEnd();
+		var l_endPosition:FlxPoint = recording.currentFrame().position.copyTo();
+		avatar.view.setPosition( l_endPosition.x, l_endPosition.y );
+		l_endPosition.put();
+	}
+	
+	public function placeAvatarAtBeginningOfReplay():Void
+	{
+		recording.skipToBeginning();
+		var l_endPosition:FlxPoint = recording.currentFrame().position.copyTo();
+		avatar.view.setPosition( l_endPosition.x, l_endPosition.y );
+		l_endPosition.put();
 	}
 	
 	private function reverseTime():Void
