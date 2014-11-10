@@ -257,10 +257,11 @@ class Player extends FlxBasic
 			}
 		}
 		
+		/*  need to bake this concept a bit more.... too glitchy
 		for ( l_avatar in _avatarMap )
 		{
 			cast(l_avatar.controller, AvatarControllerReplay).placeAvatarAtEndOfReplay();
-		}
+		}*/
 		
 		ui.showChoices();
 		// if every previous frame is null then we are finished
