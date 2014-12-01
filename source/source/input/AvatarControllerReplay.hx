@@ -1,6 +1,7 @@
 package input;
 import avatar.Avatar;
 import avatar.AvatarEvent;
+import avatar.AvatarType;
 import flixel.FlxBasic;
 import flixel.FlxG;
 import flixel.util.FlxPoint;
@@ -31,10 +32,13 @@ class AvatarControllerReplay extends FlxBasic implements IAvatarController
 	private var _bumpTimeLessThanCurrentTime:Bool;
 	
 	
-	public function new( p_avatar:Avatar, p_recording:AvatarRecording, p_timeModifier:Float = 1, p_manualFrames:Bool = false ) 
+	public function new() 
 	{
 		super();
-		
+	}
+	
+	public function init(p_avatar:Avatar, p_recording:AvatarRecording, p_timeModifier:Float = 1, p_manualFrames:Bool = false):Void
+	{
 		dispatcher = new EventDispatcher();
 		
 		avatar = p_avatar;
@@ -77,6 +81,10 @@ class AvatarControllerReplay extends FlxBasic implements IAvatarController
 	
 	override public function update():Void 
 	{
+		if ( !exists ) 
+		{
+			return;
+		}
 		super.update();
 		if ( avatar.player.state == PlayerState.PLAYING )
 		{
@@ -113,6 +121,10 @@ class AvatarControllerReplay extends FlxBasic implements IAvatarController
 			var l_replayFrame:ReplayFrame = recording.currentFrame();
 			if ( l_replayFrame != null )
 			{
+				if ( avatar.player != Reg.PLAYERS[0] )
+				{
+					var test:Int = 0;
+				}
 				avatar.view.setPosition( l_replayFrame.position.x, l_replayFrame.position.y );
 				if ( _manualFrames )
 				{
@@ -161,10 +173,19 @@ class AvatarControllerReplay extends FlxBasic implements IAvatarController
 		}
 	}
 	
-	override public function destroy():Void 
+	override public function kill():Void
 	{
 		avatar.dispatcher.removeEventListener( AvatarEvent.BUMPED, onAvatarBump );
-		recording.destroy();
+		avatar = null;
+		recording = null;
+		dispatcher = null;
+		currentDirection = null;
+		super.kill();
+	}
+	
+	override public function destroy():Void 
+	{
+		kill();
 		super.destroy();
 	}
 	

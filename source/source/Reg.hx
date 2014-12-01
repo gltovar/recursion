@@ -6,10 +6,15 @@ import flixel.FlxSprite;
 import flixel.group.FlxTypedGroup;
 import flixel.tile.FlxTilemap;
 import flixel.util.FlxColor;
+import input.AvatarControllerInput;
+import input.AvatarControllerReplay;
 import input.DirectionVector;
 import player.Player;
 import player.PlayerManager;
+import replay.AvatarRecorder;
+import replay.AvatarRecording;
 import replay.PlayerPath;
+import replay.ReplayFrame;
 /**
  * ...
  * @author 
@@ -53,5 +58,26 @@ class Reg
 	
 	public static var PLAYER_UI_LAYER:FlxTypedGroup<FlxSprite>;
 	
+	public static var PLAYER_PATH_LAYER:FlxTypedGroup<PlayerPath>;
+	
+	public static var PLAYER_AVATAR_END_POINTS:FlxTypedGroup<AvatarView>;
+	
 	public static var PLAYER_MANAGER:PlayerManager;
+	
+	
+	public static var MUSIC_CHOOSE:String = "assets/music/music_choose.wav";
+	public static var MUSIC_PLAYING:String = "assets/music/music_playing.wav";
+	public static var MUSIC_REWIND:String = "assets/music/music_rewind.wav";
+	
+	public static var SOUND_BUMP:String = "assets/sounds/bump.wav";
+	public static var SOUND_ATTACK:Map<AvatarType, String> = [	AvatarType.ROCK 	=> "assets/sounds/attack_rock.wav",
+																AvatarType.PAPER 	=> "assets/sounds/attack_paper.wav",
+																AvatarType.SCISSORS	=> "assets/sounds/attack_scissors.wav"];
+																
+	public static var AVATAR_CONTROLLER_INPUTS:FlxTypedGroup<AvatarControllerInput>;
+	public static var AVATAR_CONTROLLER_REPLAYS:FlxTypedGroup<AvatarControllerReplay>;
+	
+	public static var AVATAR_RECORDERS:FlxTypedGroup<AvatarRecorder>;
+	public static var AVATAR_RECORDINGS:FlxTypedGroup<AvatarRecording>;
+	public static var REPLAY_FRAMES:FlxTypedGroup<ReplayFrame>;
 }

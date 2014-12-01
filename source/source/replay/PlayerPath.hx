@@ -81,6 +81,7 @@ class PlayerPath extends FlxSpriteGroup
 	override public function reset(X:Float, Y:Float):Void 
 	{
 		super.reset(X, Y);
+		callAll("kill");
 		_lastPathNode = [	PATH_BOTTOM => new Array<FlxPoint>(),
 							PATH_MID 	=> new Array<FlxPoint>(),
 							PATH_TOP 	=> new Array<FlxPoint>() ];
@@ -116,6 +117,8 @@ class PlayerPath extends FlxSpriteGroup
 		var l_pathId:String;
 		var l_pathIdIndex:Int;
 		
+		
+		
 		while ( l_pathsToCheck.length > 0 )
 		{
 			l_pathIdIndex = l_pathsToCheck.length - 1;
@@ -124,7 +127,7 @@ class PlayerPath extends FlxSpriteGroup
 				l_pathId = l_pathsToCheck[ l_pathIdIndex ];
 				if ( _lastPathNode[ l_pathId ].length > l_pathIndex + 1 )
 				{
-					setAnimationOfPath( _lastPathNode[ l_pathId ], l_pathId, l_pathIndex );
+					setPathTile( _lastPathNode[ l_pathId ], l_pathId, l_pathIndex );
 				}
 				else
 				{
@@ -139,7 +142,7 @@ class PlayerPath extends FlxSpriteGroup
 		
 	}
 	
-	private function setAnimationOfPath(p_pathPoints:Array<FlxPoint>, p_pathId:String, p_pathIndex:Int):Void
+	private function setPathTile(p_pathPoints:Array<FlxPoint>, p_pathId:String, p_pathIndex:Int):Void
 	{
 		var l_prevDirection:Directions = Directions.RIGHT;
 		var l_nextDirection:Directions = Directions.RIGHT;

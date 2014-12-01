@@ -18,7 +18,7 @@ class PlayerManager extends FlxBasic
 	public function new() 
 	{
 		super();
-		state = GameState.CHOOSING;
+		switchToChoosing();
 	}
 	
 	override public function update():Void 
@@ -80,7 +80,9 @@ class PlayerManager extends FlxBasic
 	{
 		_runTime = 0;
 		
-		for ( l_player in Reg.PLAYERS )
+		Reg.PLAYER_AVATAR_END_POINTS.callAll("destroy"); // destroy all the avatars that were showing where players ended.
+		
+		for ( l_player in Reg.PLAYERS ) // eitherr having players that are ready starting playing, or disable the ones that aren't
 		{
 			if ( l_player.hasJoined() )
 			{
@@ -92,6 +94,7 @@ class PlayerManager extends FlxBasic
 			}
 		}
 		
+		FlxG.sound.playMusic( Reg.MUSIC_PLAYING, .75 );
 		switchState( GameState.PLAYING );
 	}
 	
@@ -130,6 +133,7 @@ class PlayerManager extends FlxBasic
 			}
 		}
 		
+		FlxG.sound.playMusic( Reg.MUSIC_REWIND,.75 );
 		switchState( GameState.REWINDING );
 	}
 	
@@ -186,6 +190,12 @@ class PlayerManager extends FlxBasic
 			}
 		}
 		
+		switchToChoosing();
+	}
+	
+	private function switchToChoosing():Void
+	{
+		FlxG.sound.playMusic( Reg.MUSIC_CHOOSE, .5 );
 		switchState( GameState.CHOOSING );
 	}
 }

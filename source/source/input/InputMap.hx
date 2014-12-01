@@ -45,6 +45,8 @@ class InputMap
 		_left = p_left;
 		_right = p_right;
 		
+		//FlxG.keys.
+		
 		inputMap[Directions.UP] = function():Bool { return _up(); };
 		inputMap[Directions.DOWN] = function():Bool { return _down(); };
 		inputMap[Directions.LEFT] = function():Bool { return _left(); };

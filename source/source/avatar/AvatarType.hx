@@ -12,17 +12,20 @@ class AvatarType
 	static public var ROCK:AvatarType = new AvatarType([ 	new AnimationInfo(CharacterAnimation.WALK, "rock_walk_", 4, true),
 															new AnimationInfo(CharacterAnimation.ATTACK, "rock_attack_", 15, false),
 															new AnimationInfo(CharacterAnimation.DIE, "rock_dead_", 1, true) ],
-															new FlxPoint(15,14));
+														new FlxPoint(15, 14),
+														"Rock");
 															
 	static public var PAPER:AvatarType = new AvatarType([ 	new AnimationInfo(CharacterAnimation.WALK, "paper_walk_", 4, true),
 															new AnimationInfo(CharacterAnimation.ATTACK, "paper_attack_", 15, false),
 															new AnimationInfo(CharacterAnimation.DIE, "paper_dead_", 1, true) ],
-															new FlxPoint(10,17));
+														new FlxPoint(10, 17),
+														"Paper");
 	
 	static public var SCISSORS:AvatarType = new AvatarType([ 	new AnimationInfo(CharacterAnimation.WALK, "scissors_walk_", 4, true),
 																new AnimationInfo(CharacterAnimation.ATTACK, "scissors_attack_", 15, false),
 																new AnimationInfo(CharacterAnimation.DIE, "scissors_dead_", 1, true) ],
-																new FlxPoint(7,6));
+															new FlxPoint(7, 6),
+															"Scissors");
 	
 	public static var TYPES:Array<AvatarType> = [ROCK, PAPER, SCISSORS];
 	
@@ -33,11 +36,13 @@ class AvatarType
 	public var texture(get, null):TexturePackerData;
 	public var animations(default, null):Array<AnimationInfo>;
 	public var offset(default, null):FlxPoint;
+	public var name(default, null):String;
 	
-	public function new( p_animations:Array<AnimationInfo>, p_offset:FlxPoint ) 
+	public function new( p_animations:Array<AnimationInfo>, p_offset:FlxPoint, p_name:String ) 
 	{
 		animations = p_animations;
 		offset = p_offset;
+		name = p_name;
 		
 		/*var sprite:FlxSprite = new FlxSprite();
 		sprite.loadGraphicFromTexture(test);

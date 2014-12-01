@@ -37,10 +37,13 @@ class AvatarControllerInput extends FlxBasic implements IAvatarController
 	//private var _bumpedDirection:Directions = null;
 	private var _prevPoint:FlxPoint;
 	
-	public function new( p_avatar:Avatar ) 
+	public function new() 
 	{
 		super();
-		
+	}
+	
+	public function init( p_avatar:Avatar ):Void
+	{
 		currentDirection = Directions.NONE;
 		
 		dispatcher = new EventDispatcher();
@@ -55,7 +58,6 @@ class AvatarControllerInput extends FlxBasic implements IAvatarController
 		intersections = avatar.player.intersections;
 		
 		avatar.dispatcher.addEventListener( AvatarEvent.BUMPED, onAvatarBumped, false, 0, true );
-		
 	}
 	
 	private function updateVelocity( p_direction:Directions )
@@ -107,9 +109,14 @@ class AvatarControllerInput extends FlxBasic implements IAvatarController
 	
 	override public function update():Void
 	{
+		if ( !exists ) 
+		{
+			return;
+		}
 		super.update();
 		
-		avatar.player.path.addPathNode( Reg.AVATAR_TO_PATH[ avatar.avatarType ], avatar.view.x, avatar.view.y );
+		
+		//avatar.player.path.addPathNode( Reg.AVATAR_TO_PATH[ avatar.avatarType ], avatar.view.x, avatar.view.y );
 		
 		if ( avatar.player.state != PlayerState.PLAYING )
 		{
@@ -147,17 +154,20 @@ class AvatarControllerInput extends FlxBasic implements IAvatarController
 		
 		FlxG.overlap( avatar.view, intersections, onIntersectionOverlap );
 		
+		var l_newDirection:Directions = Directions.NONE;
+		var l_lowestDirectionTime:Int = 0;
+		
 		if( _currentIntersection != null )
 		{
 			
 			var l_passedThoughCenterTest:Bool = passedThroughCenterTest();
 			var l_amountPassedCenter:Int = FlxMath.distanceBetween(avatar.view, _currentIntersection);
-			if ( FlxMath.getDistance(avatar.view.getScreenXY(), _currentIntersection.getScreenXY()) <= 4 )
+			if ( FlxMath.getDistance(avatar.view.getScreenXY(), _currentIntersection.getScreenXY()) <= 12 )
 			{
 				
 				//avatar.view.color = FlxRandom.colorExt(128, 255, 128, 255, 0, 0);
-				var l_newDirection:Directions = Directions.NONE;
-				var l_lowestDirectionTime:Int = 0;
+				l_newDirection = Directions.NONE;
+				l_lowestDirectionTime = 0;
 				for (l_direction in _currentIntersection.validDirections)
 				{
 					if (_timeLastPressed[l_direction] > FlxG.game.ticks - INPUT_MAX_RELEASE_TIME && l_lowestDirectionTime < _timeLastPressed[ l_direction ])
@@ -273,10 +283,28 @@ class AvatarControllerInput extends FlxBasic implements IAvatarController
 		//FlxG.log.add( l_debugText );
 	}
 	
-	override public function destroy():Void 
+	override public function kill():Void
 	{
 		dispatcher = null;
 		avatar.dispatcher.removeEventListener( AvatarEvent.BUMPED, onAvatarBumped );
+		intersections = null;
+		avatar = null;
+		currentDirection = null;
+		_currentIntersection = null;
+		_intendedDirection = null;
+		_timeLastPressed = null;
+		
+		if ( _prevPoint != null )
+		{
+			_prevPoint.put();
+		}
+		_prevPoint = null;
+		super.kill();
+	}
+	
+	override public function destroy():Void 
+	{
+		kill();
 		super.destroy();
 	}
 }

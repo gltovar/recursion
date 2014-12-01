@@ -2,6 +2,8 @@ package player ;
 
 import avatar.Avatar;
 import avatar.AvatarType;
+import avatar.AvatarView;
+import avatar.CharacterAnimation;
 import flixel.addons.ui.FlxUI;
 import flixel.addons.ui.U;
 import flixel.FlxBasic;
@@ -13,6 +15,7 @@ import input.AvatarControllerReplay;
 import input.InputMap;
 import intersections.IntersectionNode;
 import openfl.events.EventDispatcher;
+import replay.AvatarRecording;
 import replay.PlayerPath;
 
 /**
@@ -34,7 +37,7 @@ class Player extends FlxBasic
 	public var ui:PlayerUIManager;
 	public var uiPoint:FlxPoint;
 	public var id(default, null):String;
-	public var path:PlayerPath;
+	//public var path:PlayerPath;
 	
 	private var _spawningPoint:FlxPoint;
 	
@@ -50,9 +53,9 @@ class Player extends FlxBasic
 		
 		dispatcher = new EventDispatcher();
 		_avatarMap = new Map<AvatarType, Avatar>();
-		path = new PlayerPath();
+		/*path = new PlayerPath();
 		path.reset(0, 0);
-		path.color = Reg.PLAYER_COLORS[Reg.PLAYERS.indexOf(this)];
+		path.color = Reg.PLAYER_COLORS[Reg.PLAYERS.indexOf(this)];*/
 		
 		Reg.PLAYERS.push( this );
 		inputMap = p_inputMap;
@@ -109,6 +112,12 @@ class Player extends FlxBasic
 				Reg.AVATAR_VIEWS.add( controllingAvatar.view );
 				Reg.AVATAR_TYPES_MAP[_choice].add( controllingAvatar.view );
 			}
+			else
+			{
+				// TODO: potential problem point with recycling recordings
+				var l_recording:AvatarRecording = cast( controllingAvatar.controller, AvatarControllerReplay).recording;
+				controllingAvatar.view.setPosition( l_recording.currentFrame().position.x, l_recording.currentFrame().position.y );
+			}
 		}
 		else
 		{
@@ -117,9 +126,9 @@ class Player extends FlxBasic
 		
 		ui.showChoices();
 		updateControls();
-		Reg.PLAYER_UI_LAYER.remove( path );
+		/*Reg.PLAYER_UI_LAYER.remove( path );
 		path.reset(0, 0);
-		path.color = Reg.PLAYER_COLORS[Reg.PLAYERS.indexOf(this)];
+		path.color = Reg.PLAYER_COLORS[Reg.PLAYERS.indexOf(this)];*/
 		switchState( PlayerState.PLAYING );
 	}
 	
@@ -257,16 +266,39 @@ class Player extends FlxBasic
 			}
 		}
 		
-		/*  need to bake this concept a bit more.... too glitchy
-		for ( l_avatar in _avatarMap )
-		{
-			cast(l_avatar.controller, AvatarControllerReplay).placeAvatarAtEndOfReplay();
-		}*/
+		
 		
 		ui.showChoices();
 		// if every previous frame is null then we are finished
-		path.drawPaths();
-		Reg.PLAYER_UI_LAYER.add( path ); 
+		//path.drawPaths();
+		
+		var l_recording:AvatarRecording;
+		//  need to bake this concept a bit more.... too glitchy
+		for ( l_avatar in _avatarMap )
+		{
+			//cast(l_avatar.controller, AvatarControllerReplay).placeAvatarAtEndOfReplay();
+			l_recording = cast( l_avatar.controller, AvatarControllerReplay).recording;
+			l_recording.skipToEnd();
+			/*var l_endPointAvatar:FlxSprite = new FlxSprite();
+			l_endPointAvatar.loadGraphic( l_avatar.avatarType.texture, true, 32, 32 );
+			l_endPointAvatar.*/
+			var l_view:AvatarView = new AvatarView(l_recording.currentFrame().position.x, l_recording.currentFrame().position.y, l_avatar, intersections);
+			l_view.color = Reg.PLAYER_COLORS[ Reg.PLAYERS.indexOf(this) ];
+			
+			if ( l_recording.currentFrame().avatarAlive == false )
+			{
+				l_view.dummy = true;
+				l_view.animation.play( CharacterAnimation.DIE.getName() );
+			}
+			
+			//l_avatar.recorder.kill();
+			
+			Reg.PLAYER_AVATAR_END_POINTS.add( l_view );
+		}
+		
+		//Reg.PLAYER_PATH_LAYER.add( path );
+		
+		
 		
 		switchState(PlayerState.CHOOSING);
 	}

@@ -27,7 +27,8 @@ class IntersectionNode extends FlxSprite
 		
 		mapPoint = p_mapPoint;
 		
-		this.makeGraphic(p_width, p_height, FlxColor.TRANSPARENT);
+		//this.makeGraphic(p_width, p_height, FlxColor.TRANSPARENT);
+		this.makeGraphic(p_width, p_height, 0x00FFFFFF);
 		color = FlxColor.CYAN;
 		
 		x = mapPoint.x * p_width;

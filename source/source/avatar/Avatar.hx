@@ -27,6 +27,12 @@ class Avatar extends FlxBasic
 	public var state(default, null):AvatarState;
 	public var frozen(default, null):Bool;
 	
+	private var _inputController:AvatarControllerInput;
+	private var _replayController:AvatarControllerReplay;
+	private var _rewindController:AvatarControllerReplay;
+	
+	private var _rewindRecording:AvatarRecording;
+	private var _replayRecording:AvatarRecording;
 	
 	public function new( p_player:Player, p_avatarType:AvatarType, p_x:Float, p_y:Float ) 
 	{
@@ -40,7 +46,52 @@ class Avatar extends FlxBasic
 		avatarType = p_avatarType;
 		view = new AvatarView(p_x, p_y, this, player.intersections);
 		
+		_inputController = Reg.AVATAR_CONTROLLER_INPUTS.recycle( AvatarControllerInput );
+		_replayController = Reg.AVATAR_CONTROLLER_REPLAYS.recycle( AvatarControllerReplay );
+		_rewindController = Reg.AVATAR_CONTROLLER_REPLAYS.recycle( AvatarControllerReplay );
+		
+		_rewindRecording = Reg.AVATAR_RECORDINGS.recycle( AvatarRecording );
+		_replayRecording = Reg.AVATAR_RECORDINGS.recycle( AvatarRecording );
+		
+		recorder = Reg.AVATAR_RECORDERS.recycle( AvatarRecorder );
+		
+		
 		//FlxG.watch.add(this, "state", "avatar state: " );
+	}
+	
+	override public function kill():Void 
+	{
+		state = null;
+		player = null;
+		dispatcher = null;
+		avatarType = null;
+		view.kill();
+		
+		_inputController.kill();
+		_replayController.kill();
+		_rewindController.kill();
+		
+		_rewindRecording.kill();
+		_replayRecording.kill();
+		
+		recorder.kill();
+		
+		_inputController = null;
+		_replayController = null;
+		_rewindController = null;
+		
+		_rewindRecording = null;
+		_replayRecording = null;
+		
+		recorder = null;
+		
+		super.kill();
+	}
+	
+	override public function destroy():Void 
+	{
+		kill();
+		super.destroy();
 	}
 	
 	override public function update():Void 
@@ -115,12 +166,13 @@ class Avatar extends FlxBasic
 	
 	public function rewind():Void
 	{
-		convertToReplay( -3, false, true);
+		convertToRewind();
 		switchState( AvatarState.REWINDING );
 	}
 	
 	public function play( p_userControlled:Bool ):Void
 	{
+		
 		view.revive();
 		if ( p_userControlled )
 		{
@@ -134,40 +186,45 @@ class Avatar extends FlxBasic
 		switchState( AvatarState.ALIVE );
 	}
 	
-	private function convertToReplay( p_timeModifier:Float = 1, p_destroyRecording:Bool = true, p_manualFrames:Bool = false ):Void
+	private function convertToRewind():Void
 	{
-		/* TODO: need to bake this a bit more too glictchy
-		if ( Std.is( controller, AvatarControllerReplay ) )
-		{
-			cast( controller, AvatarControllerReplay ).placeAvatarAtBeginningOfReplay();
-		}*/
+		recorder.recording.cutExtraFrames();
 		
-		tryAndDestroy( cast(controller) );
-		controller = new AvatarControllerReplay(this, recorder.recording.clone(),p_timeModifier, p_manualFrames);		
+		_replayRecording = _rewindRecording;
+		_rewindRecording = recorder.recording;
 		
-		if ( p_destroyRecording )
-		{
-			tryAndDestroy( recorder );
-			recorder = new AvatarRecorder(this);
-		}
-	}
-	
-	private function convertToUserControlled():Void
-	{
-		tryAndDestroy( cast(controller) );
-		controller = new AvatarControllerInput(this);
-		
-		tryAndDestroy( recorder );
-		recorder = new AvatarRecorder(this);
+		_rewindController.init(this, _rewindRecording, -3, true);
+		controller = _rewindController;
 		
 		view.updateAvatarController( controller );
 	}
 	
-	static private function tryAndDestroy( p_basic:FlxBasic ):Void
+	//private function convertToReplay( p_timeModifier:Float = 1, p_destroyRecording:Bool = true, p_manualFrames:Bool = false ):Void
+	private function convertToReplay():Void
+	{
+		_replayController.init(this, _rewindRecording );
+		controller = _replayController;
+		
+		recorder.init(this, _replayRecording);
+		
+		view.updateAvatarController( controller );
+	}
+	
+	private function convertToUserControlled():Void
+	{
+		_inputController.init( this );
+		controller = _inputController;
+		
+		view.updateAvatarController( controller );
+		
+		recorder.init( this, _replayRecording );
+	}
+	
+	static private function tryAndKill( p_basic:FlxBasic ):Void
 	{
 		if ( p_basic != null )
 		{
-			p_basic.destroy;
+			p_basic.kill();
 		}
 	}
 	

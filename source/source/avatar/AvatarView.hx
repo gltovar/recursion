@@ -14,6 +14,8 @@ class AvatarView extends FlxSprite
 {
 	private static inline var INPUT_MAX_RELEASE_TIME:Int = 300;
 	
+	public var dummy:Bool = false;
+	
 	public var avatar(default, null):Avatar;	
 	
 	private var _avatarController:IAvatarController;
@@ -36,7 +38,7 @@ class AvatarView extends FlxSprite
 									l_characterAnimation.looped );
 		}
 		
-		FlxG.watch.add(animation, "name");
+		//FlxG.watch.add(animation, "name");
 		setSize(32, 32);
 		offset.set( avatar.avatarType.offset.x, avatar.avatarType.offset.y );
 		
@@ -51,13 +53,20 @@ class AvatarView extends FlxSprite
 	
 	override public function update():Void
 	{
+		
+		
 		super.update();
+		
+		if ( dummy )
+		{
+			return;
+		}
 		
 		switch( avatar.state )
 		{
 			case AvatarState.ALIVE:
 				updateAnimation( CharacterAnimation.WALK.getName() );
-				avatar.player.path.addPathNode( Reg.AVATAR_PATH_MAP[avatar.avatarType], x, y );
+				//avatar.player.path.addPathNode( Reg.AVATAR_PATH_MAP[avatar.avatarType], x, y );
 				
 			case AvatarState.DEAD:
 				velocity.set(0, 0);
@@ -102,13 +111,19 @@ class AvatarView extends FlxSprite
 	public function attack():Void
 	{
 		animation.play(CharacterAnimation.ATTACK.getName());
+		FlxG.sound.play( Reg.SOUND_ATTACK[avatar.avatarType] );
 	}
 	
 	public function updateAvatarController( p_avatarController:IAvatarController ):Void
 	{
 		if ( _avatarController != null )
 		{
-			_avatarController.dispatcher.removeEventListener( AvatarEvent.DIRECTION_CHANGE, onDirectionChange );
+			if ( _avatarController.dispatcher != null )
+			{
+				_avatarController.dispatcher.removeEventListener( AvatarEvent.DIRECTION_CHANGE, onDirectionChange );
+			}
+			
+			_avatarController = null;
 		}
 		
 		_avatarController = p_avatarController;
@@ -118,5 +133,22 @@ class AvatarView extends FlxSprite
 	private function onDirectionChange( e:AvatarEvent ):Void
 	{
 		//currentDirection = _avatarController.currentDirection;
+	}
+	
+	override public function kill():Void 
+	{
+		if ( _avatarController != null )
+		{
+			_avatarController.dispatcher.removeEventListener( AvatarEvent.DIRECTION_CHANGE, onDirectionChange );
+			_avatarController = null;
+		}
+		
+		super.kill();
+	}
+	
+	override public function destroy():Void 
+	{
+		kill();
+		super.destroy();
 	}
 }

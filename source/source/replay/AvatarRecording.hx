@@ -1,44 +1,81 @@
 package replay;
+import flixel.FlxBasic;
+import flixel.util.FlxPoint;
 
 /**
  * ...
  * @author 
  */
-class AvatarRecording
-{
+class AvatarRecording extends FlxBasic
+{	
 	private var _replayFrames:Array<ReplayFrame>;
 	private var _currentFrameIndex:Int;
 	
-	public function new( p_replayFrames:Array<ReplayFrame> = null ) 
+	public function new() 
 	{
-		if ( p_replayFrames != null )
-		{
-			_replayFrames = p_replayFrames;
-		}
-		else
+		super();
+		
+	}
+	
+	public function init( p_replayFrames:Array<ReplayFrame> = null )
+	{
+		
+		if ( _replayFrames == null )
 		{
 			_replayFrames = new Array<ReplayFrame>();
 		}
+		
 		_currentFrameIndex = 0;
 	}
 	
 	public function clone():AvatarRecording
 	{
-		return new AvatarRecording( _replayFrames );
+		var l_replayFrames:Array<ReplayFrame> = new Array<ReplayFrame>();
+		var l_index:Int = 0;
+		while( l_index < _replayFrames.length )
+		{
+			l_replayFrames.push( _replayFrames[ l_index ].clone() );
+			++l_index;
+		}
+		var l_clone:AvatarRecording = Reg.AVATAR_RECORDINGS.recycle( AvatarRecording );
+		l_clone.init( l_replayFrames );
+		return l_clone;
 	}
 	
-	public function addFrame( p_replayFrame:ReplayFrame, p_push:Bool = true )
+	public function addFrame( p_timestamp:Float, p_position:FlxPoint = null, p_direction:Directions = null, p_alive:Bool = true, p_animationFrame:Int = 0 ):Void
 	{
-		_replayFrames.push( p_replayFrame );
-		
-		if ( p_push == false )
+		if ( _currentFrameIndex < _replayFrames.length )
 		{
-			_replayFrames.sort(SortFramesByTimestamp);
-			// skip to time;
+			var l_replayFrame:ReplayFrame = currentFrame();
+			l_replayFrame.timestamp = p_timestamp;
+			
+			l_replayFrame.position.copyFrom( p_position );
+			p_position.put();
+			
+			l_replayFrame.direction = p_direction;
+			l_replayFrame.alive = p_alive;
+			l_replayFrame.animationFrame = p_animationFrame;
 		}
 		else
 		{
-			skipToEnd();
+			_replayFrames.push( ReplayFrame.get( p_timestamp, p_position, p_direction, p_alive, p_animationFrame ) );
+		}
+		
+		++_currentFrameIndex;
+	}
+	
+	public function cutExtraFrames():Void
+	{
+		if ( _currentFrameIndex < _replayFrames.length - 1 )
+		{
+			var l_framesToCut:Int = _replayFrames.length - 1 - _currentFrameIndex;
+			var l_cutFrames:Array<ReplayFrame> = _replayFrames.splice(_currentFrameIndex, l_framesToCut);
+			var l_cutIndex:Int = l_cutFrames.length - 1;
+			while ( l_cutIndex >= 0 )
+			{
+				l_cutFrames[ l_cutIndex ].kill();
+				--l_cutIndex;
+			}	
 		}
 	}
 	
@@ -131,19 +168,27 @@ class AvatarRecording
 		return 0;
 	}
 	
-	public function destroy():Void
+	override public function kill():Void
 	{
 		if ( _replayFrames != null )
 		{
-			for ( l_replayFrame in _replayFrames )
+			var l_frameIndex:Int = 0;
+			while ( l_frameIndex < _replayFrames.length )
 			{
-				if ( l_replayFrame.position != null )
-				{
-					l_replayFrame.position.put();
-				}
-				l_replayFrame.kill();
+				_replayFrames[ l_frameIndex ].kill();
+				++l_frameIndex;
 			}
+			
+			_replayFrames = null;
 		}
+		
+		super.kill();
+	}
+	
+	override public function destroy():Void
+	{
+		kill();
+		super.destroy();
 	}
 	
 }
