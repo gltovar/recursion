@@ -1,5 +1,5 @@
 # Recursion
-Concept by [Tim Fowers](http://www.fowers.net/), Development By [Louis Tovar](http://www.gltovar.com/), Music by [CaptainMitch](http://captainmitch.newgrounds.com/)
+Concept by [Tim Fowers](http://www.fowers.net/), Development By [Louis Tovar](http://www.gltovar.com/), Music by [CaptainMitch](http://www.newgrounds.com/audio/listen/592660)
 
 [Here is where you can find the current version](https://github.com/gltovar/recursion/tree/master/source/export/flash/bin)
 
